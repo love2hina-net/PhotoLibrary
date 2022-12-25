@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace MauiApp1;
+namespace love2hina.Windows.MAUI.PhotoViewer;
 
 [Application]
 public class MainApplication : MauiApplication

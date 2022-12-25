@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace MauiApp1;
+namespace love2hina.Windows.MAUI.PhotoViewer;
 
 public class Program
 {

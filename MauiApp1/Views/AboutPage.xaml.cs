@@ -1,4 +1,4 @@
-﻿namespace MauiApp1.Views;
+﻿namespace love2hina.Windows.MAUI.PhotoViewer.Views;
 
 public partial class AboutPage : ContentPage
 {

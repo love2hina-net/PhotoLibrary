@@ -1,4 +1,4 @@
-﻿namespace MauiApp1;
+﻿namespace love2hina.Windows.MAUI.PhotoViewer;
 
 public partial class AppShell : Shell
 {

@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace MauiApp1;
+namespace love2hina.Windows.MAUI.PhotoViewer;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

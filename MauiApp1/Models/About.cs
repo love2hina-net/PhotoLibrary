@@ -1,4 +1,4 @@
-﻿namespace MauiApp1.Models;
+﻿namespace love2hina.Windows.MAUI.PhotoViewer.Models;
 
 internal class About
 {
