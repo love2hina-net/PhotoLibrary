@@ -1,8 +1,8 @@
 namespace love2hina.Windows.MAUI.PhotoViewer.Pages;
 
-public partial class DirectoryView : ContentPage
+public partial class DirectoryPage : ContentPage
 {
-	public DirectoryView()
+	public DirectoryPage()
 	{
 		InitializeComponent();
 	}

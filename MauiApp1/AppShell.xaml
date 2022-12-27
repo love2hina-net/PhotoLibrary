@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <Shell
     x:Class="love2hina.Windows.MAUI.PhotoViewer.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -7,9 +7,15 @@
     xmlns:views="clr-namespace:love2hina.Windows.MAUI.PhotoViewer.Views"
     Shell.FlyoutBehavior="Flyout">
 
+    <!--
     <FlyoutItem Title="Main">
         <ShellContent
-            ContentTemplate="{DataTemplate pages:DirectoryView}" />
+            ContentTemplate="{DataTemplate views:MainPage}" />
+    </FlyoutItem>
+    -->
+    <FlyoutItem Title="Test">
+        <ShellContent
+            ContentTemplate="{DataTemplate pages:DirectoryPage}" />
     </FlyoutItem>
     <ShellContent
         Title="About"
