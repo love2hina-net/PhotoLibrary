@@ -4,13 +4,14 @@
              xmlns:foldable="clr-namespace:Microsoft.Maui.Controls.Foldable;assembly=Microsoft.Maui.Controls.Foldable"
              xmlns:controls="clr-namespace:love2hina.Windows.MAUI.PhotoViewer.Controls"
              x:Class="love2hina.Windows.MAUI.PhotoViewer.Pages.DirectoryPage"
-             BindingContext="{Binding Source={RelativeSource Self}}"
+             x:Name="parent"
              Title="DirectoryView">
 
     <foldable:TwoPaneView>
         <foldable:TwoPaneView.Pane1>
             <controls:DirectoryView
-                TargetDirectory="{Binding TargetDirectory}" />
+                x:Name="directory"
+                TargetDirectory="{Binding Source={x:Reference parent}, Path=TargetDirectory}" />
         </foldable:TwoPaneView.Pane1>
         <foldable:TwoPaneView.Pane2>
             <Label Text="Pane2 StackLayout"/>

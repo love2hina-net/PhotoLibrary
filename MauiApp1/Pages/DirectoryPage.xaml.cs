@@ -16,7 +16,6 @@ public partial class DirectoryPage : ContentPage
         get => m_dirTarget;
         set
         {
-            Console.WriteLine($"DirectoryPage changed: {value}");
             if (m_dirTarget != value)
             {
                 m_dirTarget = value;
