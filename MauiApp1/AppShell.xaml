@@ -13,9 +13,10 @@
             ContentTemplate="{DataTemplate views:MainPage}" />
     </FlyoutItem>
     -->
-    <FlyoutItem Title="Test">
-        <ShellContent
-            ContentTemplate="{DataTemplate pages:DirectoryPage}" />
+    <FlyoutItem
+        Title="Test"
+        Route="Test">
+        <ShellContent ContentTemplate="{DataTemplate pages:DirectoryPage}" />
     </FlyoutItem>
     <ShellContent
         Title="About"
