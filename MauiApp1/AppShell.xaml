@@ -7,17 +7,10 @@
     xmlns:views="clr-namespace:love2hina.Windows.MAUI.PhotoViewer.Views"
     Shell.FlyoutBehavior="Flyout">
 
-    <!--
-    <FlyoutItem Title="Main">
-        <ShellContent
-            ContentTemplate="{DataTemplate views:MainPage}" />
-    </FlyoutItem>
-    -->
-    <FlyoutItem
-        Title="Test"
-        Route="Test">
-        <ShellContent ContentTemplate="{DataTemplate pages:DirectoryPage}" />
-    </FlyoutItem>
+    <ShellContent
+        Route="viewer"
+        Title="ビューワー"
+        ContentTemplate="{DataTemplate pages:ViewerRootPage}" />
     <ShellContent
         Title="About"
         ContentTemplate="{DataTemplate views:AboutPage}" />

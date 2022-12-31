@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Controls;
 
@@ -48,7 +47,7 @@ public partial class DirectoryView : CollectionView
         {
             { "TargetDirectory", dir }
         };
-        await Shell.Current.GoToAsync("//Test", false, navigationParameter);
+        await Shell.Current.GoToAsync("//viewer/directory", false, navigationParameter);
     }
 
 }

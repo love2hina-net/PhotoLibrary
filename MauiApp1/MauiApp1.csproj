@@ -54,6 +54,9 @@
       <MauiXaml Update="Pages\DirectoryPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
+      <MauiXaml Update="Pages\ViewerRootPage.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
       <MauiXaml Update="Views\AboutPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
