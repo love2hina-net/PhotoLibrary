@@ -11,43 +11,39 @@ public partial class DirectoryView : CollectionView
     }
 
     public static readonly BindableProperty TargetDirectoryProperty =
-        BindableProperty.Create(nameof(TargetDirectory), typeof(DirectoryInfo), typeof(DirectoryView),
+        BindableProperty.Create(nameof(TargetDirectory), typeof(string), typeof(DirectoryView),
             propertyChanged: (b, o, n) => ((DirectoryView)b.BindingContext).OnPropertyChanged(nameof(Directories)));
-    public DirectoryInfo TargetDirectory
+    public string? TargetDirectory
     {
-        get => (DirectoryInfo)GetValue(TargetDirectoryProperty);
+        get => (string?)GetValue(TargetDirectoryProperty);
         set => SetValue(TargetDirectoryProperty, value);
     }
 
-    public IEnumerable<DirectoryInfo> Directories
+    public IEnumerable<string> Directories
     {
         get
         {
             if (TargetDirectory != null)
             {
-                return TargetDirectory.EnumerateDirectories();
+                return Directory.EnumerateDirectories(TargetDirectory);
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 return from d in DriveInfo.GetDrives()
                        where d.IsReady
-                       select d.RootDirectory;
+                       select d.RootDirectory.FullName;
             }
             else
             {
-                return (new DirectoryInfo("/")).EnumerateDirectories();
+                return Directory.EnumerateDirectories("/");
             }
         }
     }
 
-    async void CollectionView_SelectionChanged(System.Object sender, Microsoft.Maui.Controls.SelectionChangedEventArgs e)
+    async void CollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        DirectoryInfo dir = e.CurrentSelection.FirstOrDefault() as DirectoryInfo;
-        var navigationParameter = new Dictionary<string, object>
-        {
-            { "TargetDirectory", dir }
-        };
-        await Shell.Current.GoToAsync("//viewer/directory", false, navigationParameter);
+        var dir = e.CurrentSelection.FirstOrDefault() as string;
+        await Shell.Current.GoToAsync($"directory?TargetDirectory={dir}", false);
     }
 
 }

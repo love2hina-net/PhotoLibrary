@@ -4,14 +4,14 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Pages;
 public partial class DirectoryPage : ContentPage
 {
 
-    private DirectoryInfo m_dirTarget;
+    private string? m_dirTarget;
 
     public DirectoryPage()
     {
         InitializeComponent();
     }
 
-    public DirectoryInfo TargetDirectory
+    public string? TargetDirectory
     {
         get => m_dirTarget;
         set
