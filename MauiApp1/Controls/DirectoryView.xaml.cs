@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Security;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Controls;
 
@@ -23,20 +24,28 @@ public partial class DirectoryView : CollectionView
     {
         get
         {
+            IEnumerable<DirectoryInfo> directories;
+
             if (TargetDirectory != null)
             {
-                return Directory.EnumerateDirectories(TargetDirectory);
+                directories = new DirectoryInfo(TargetDirectory).EnumerateDirectories();
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                return from d in DriveInfo.GetDrives()
-                       where d.IsReady
-                       select d.RootDirectory.FullName;
+                // Windowsはドライブの一覧を起点とする
+                directories = from d in DriveInfo.GetDrives()
+                              where d.IsReady
+                              select d.RootDirectory;
             }
             else
             {
-                return Directory.EnumerateDirectories("/");
+                // macOSはルートディレクトリを起点とする
+                directories = new DirectoryInfo("/").EnumerateDirectories();
             }
+
+            return from d in directories
+                   where d.IsAccessable()
+                   select d.FullName;
         }
     }
 
@@ -44,6 +53,24 @@ public partial class DirectoryView : CollectionView
     {
         var dir = e.CurrentSelection.FirstOrDefault() as string;
         await Shell.Current.GoToAsync($"directory?TargetDirectory={dir}", false);
+    }
+
+}
+
+internal static class DirectoriInfoExtends
+{
+
+    public static bool IsAccessable(this DirectoryInfo directory)
+    {
+        try
+        {
+            directory.EnumerateFiles().FirstOrDefault();
+            return true;
+        }
+        catch (SystemException e) when (e is SecurityException || e is UnauthorizedAccessException)
+        {
+            return false;
+        }
     }
 
 }
