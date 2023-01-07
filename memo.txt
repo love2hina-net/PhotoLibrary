@@ -1,0 +1,14 @@
+大図書館の羊飼い
+a good librarian like a good shepherd
+
+ネコ写真部の大図書館
+a good library for cats photography club
+
+// DBファイルが大きくなったら
+DBCC SHRINKDATABASE('love2hina.Windows.WPF.PhotoViewer.Database', 10);
+
+// Migrationをするには
+dotnet tool restore
+dotnet ef
+
+dotnet ef migrations add 'v0004' 

@@ -1,4 +1,7 @@
-﻿namespace love2hina.Windows.MAUI.PhotoViewer;
+﻿using love2hina.Windows.MAUI.PhotoViewer.Database;
+using Microsoft.EntityFrameworkCore;
+
+namespace love2hina.Windows.MAUI.PhotoViewer;
 
 public partial class App : Application
 {
@@ -8,4 +11,20 @@ public partial class App : Application
 
 		MainPage = new AppShell();
 	}
+
+	protected override async void OnStart()
+	{
+		base.OnStart();
+
+		await Task.Run(() =>
+		{
+			// DBの初期化
+			using (var context = new FirebirdContext())
+			{
+                // DBテーブルを構成する
+                context.Database.Migrate();
+            }
+		});
+	}
+
 }
