@@ -34,6 +34,11 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Database.Entities
 
         public virtual byte[]? DataBits { get; set; }
 
+        public ThumbnailCache()
+        {
+            Path = string.Empty;
+        }
+
     }
 
 }

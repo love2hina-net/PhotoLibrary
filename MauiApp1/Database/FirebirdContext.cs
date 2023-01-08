@@ -17,7 +17,7 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Database
             base.OnConfiguring(optionsBuilder);
 
             var stringBuilder = new StringBuilder();
-            var pathDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"love2hina\PhotoViewer");
+            var pathDirectory = Path.Combine(FileSystem.Current.AppDataDirectory, @"love2hina\PhotoViewer");
             var pathDataFile = Path.Combine(pathDirectory, @"library.fdb");
 
             Directory.CreateDirectory(pathDirectory);
