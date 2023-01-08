@@ -1,26 +1,31 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using System.Text;
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Database
+namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database
 {
 
-    internal class FirebirdContext : DbContext
+    public class FirebirdContext : DbContext
     {
 
         private static readonly LoggerFactory loggerFactory = new (new ILoggerProvider[] { new NLogLoggerProvider() });
+
+        public static string? Directory { get; set; }
+
+        public DbSet<ThumbnailCache> ThumbnailCaches { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
 
             var stringBuilder = new StringBuilder();
-            var pathDirectory = Path.Combine(FileSystem.Current.AppDataDirectory, @"love2hina\PhotoViewer");
+            var pathDirectory = Path.Combine(Directory!, @"love2hina\PhotoViewer");
             var pathDataFile = Path.Combine(pathDirectory, @"library.fdb");
 
-            Directory.CreateDirectory(pathDirectory);
+            System.IO.Directory.CreateDirectory(pathDirectory);
 
             // 
             stringBuilder.Append($"database=localhost:{pathDataFile};");
@@ -41,8 +46,10 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Database
 
     public class FirebirdContextFactory : IDesignTimeDbContextFactory<FirebirdContext>
     {
-        FirebirdContext IDesignTimeDbContextFactory<FirebirdContext>.CreateDbContext(string[] args)
+
+        public FirebirdContext CreateDbContext(string[] args)
         {
+            FirebirdContext.Directory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             return new FirebirdContext();
         }
 

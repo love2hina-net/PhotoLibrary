@@ -1,4 +1,4 @@
-﻿using love2hina.Windows.MAUI.PhotoViewer.Database;
+﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace love2hina.Windows.MAUI.PhotoViewer;
@@ -15,6 +15,8 @@ public partial class App : Application
 	protected override async void OnStart()
 	{
 		base.OnStart();
+
+		FirebirdContext.Directory = FileSystem.Current.AppDataDirectory;
 
 		await Task.Run(() =>
 		{

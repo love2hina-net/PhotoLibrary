@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Database.Entities
+namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities
 {
     [Index(nameof(IndexHash), nameof(Path), Name = @"IDX_Path")]
     [Index(nameof(LastReferenced), Name = @"IDX_Date")]
