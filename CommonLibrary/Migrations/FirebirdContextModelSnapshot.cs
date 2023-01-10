@@ -28,9 +28,6 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                         .HasColumnType("INTEGER")
                         .HasAnnotation("Fb:ValueGenerationStrategy", FbValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<byte[]>("DataBits")
-                        .HasColumnType("BLOB SUB_TYPE BINARY");
-
                     b.Property<int?>("Height")
                         .HasColumnType("INTEGER");
 
@@ -44,8 +41,8 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                         .IsRequired()
                         .HasColumnType("VARCHAR(256)");
 
-                    b.Property<int?>("Stride")
-                        .HasColumnType("INTEGER");
+                    b.Property<byte[]>("PngData")
+                        .HasColumnType("BLOB SUB_TYPE BINARY");
 
                     b.Property<int?>("Width")
                         .HasColumnType("INTEGER");

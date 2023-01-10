@@ -21,8 +21,7 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                     LastReferenced = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     Width = table.Column<int>(type: "INTEGER", nullable: true),
                     Height = table.Column<int>(type: "INTEGER", nullable: true),
-                    Stride = table.Column<int>(type: "INTEGER", nullable: true),
-                    DataBits = table.Column<byte[]>(type: "BLOB SUB_TYPE BINARY", nullable: true)
+                    PngData = table.Column<byte[]>(type: "BLOB SUB_TYPE BINARY", nullable: true)
                 },
                 constraints: table =>
                 {

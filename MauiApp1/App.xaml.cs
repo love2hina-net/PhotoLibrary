@@ -16,12 +16,12 @@ public partial class App : Application
 	{
 		base.OnStart();
 
-		FirebirdContext.Directory = FileSystem.Current.AppDataDirectory;
+		FirebirdContextFactory.Initialize(FileSystem.Current.AppDataDirectory);
 
 		await Task.Run(() =>
 		{
 			// DBの初期化
-			using (var context = new FirebirdContext())
+			using (var context = FirebirdContextFactory.Create())
 			{
                 // DBテーブルを構成する
                 context.Database.Migrate();
