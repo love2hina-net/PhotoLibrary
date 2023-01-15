@@ -25,4 +25,9 @@
   <ItemGroup>
     <Folder Include="Resources\Images\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Resources\Images\20221224_110821834_iOS.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

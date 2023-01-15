@@ -2,7 +2,7 @@
 using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Graphics.Platform;
+using Microsoft.Maui.Graphics.Skia;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Files;
 
@@ -43,8 +43,8 @@ public static class ThumbnailLoader
 
         using (var stream = file.OpenRead())
         {
-            image = PlatformImage.FromStream(stream)
-                .Resize(256.0f, 256.0f, ResizeMode.Bleed, true);
+            image = SkiaImage.FromStream(stream)
+                ?.Resize(256.0f, 256.0f, ResizeMode.Bleed, true);
         }
 
         if (image != null)
