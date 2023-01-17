@@ -53,7 +53,7 @@ public static class ThumbnailLoader
             {
                 Width = (int)image.Width,
                 Height = (int)image.Height,
-                PngData = image.AsBytes()
+                PngData = image.AsBytes(ImageFormat.Png)
             };
 
             using (var context = FirebirdContextFactory.Create())

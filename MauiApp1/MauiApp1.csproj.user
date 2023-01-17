@@ -9,6 +9,12 @@
     <AppxManifest Update="Platforms\Windows\Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <MauiXaml Update="Controls\DirectoryView.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Controls\ThumbnailView.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Pages\DirectoryPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

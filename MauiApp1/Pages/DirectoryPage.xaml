@@ -14,7 +14,9 @@
                 TargetDirectory="{Binding Source={x:Reference parent}, Path=TargetDirectory}" />
         </foldable:TwoPaneView.Pane1>
         <foldable:TwoPaneView.Pane2>
-            <Label Text="Pane2 StackLayout"/>
+            <controls:ThumbnailView
+                x:Name="thumbnail"
+                TargetDirectory="{Binding Source={x:Reference parent}, Path=TargetDirectory}"/>
         </foldable:TwoPaneView.Pane2>
     </foldable:TwoPaneView>
 </ContentPage>
