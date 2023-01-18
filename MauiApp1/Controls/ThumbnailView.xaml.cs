@@ -17,32 +17,19 @@ public partial class ThumbnailView : CollectionView
         set => SetValue(TargetDirectoryProperty, value);
     }
 
-    public IEnumerable<Thumbnail> Thumbnails
+    public IEnumerable<FileInfo> Thumbnails
     {
         get
         {
             if (TargetDirectory != null)
             {
-                return from f in new DirectoryInfo(TargetDirectory).EnumerateFiles()
-                       select new Thumbnail(f);
+                return new DirectoryInfo(TargetDirectory).EnumerateFiles();
             }
             else
             {
-                return Enumerable.Empty<Thumbnail>();
+                return Enumerable.Empty<FileInfo>();
             }
         }
-    }
-
-}
-
-public class Thumbnail
-{
-
-    public FileInfo File { get; private set; }
-
-    internal Thumbnail(FileInfo info)
-    {
-        File = info;
     }
 
 }

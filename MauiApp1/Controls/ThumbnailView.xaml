@@ -16,7 +16,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="1"
-                       Text="{Binding File.Name}" />
+                       Text="{Binding Name}" />
             </Grid>
         </DataTemplate>
     </CollectionView.ItemTemplate>
