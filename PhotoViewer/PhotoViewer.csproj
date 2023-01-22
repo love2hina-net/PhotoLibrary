@@ -10,7 +10,7 @@
     <Nullable>enable</Nullable>
 
     <!-- Display name -->
-    <ApplicationTitle>MauiApp1</ApplicationTitle>
+    <ApplicationTitle>PhotoViewer</ApplicationTitle>
 
     <!-- App Identifier -->
     <ApplicationId>love2hina.Windows.MAUI.PhotoViewer</ApplicationId>
