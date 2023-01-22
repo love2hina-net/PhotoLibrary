@@ -1,32 +1,30 @@
-﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
-using Microsoft.EntityFrameworkCore;
+﻿using love2hina.Windows.MAUI.PhotoViewer.Pages;
 
 namespace love2hina.Windows.MAUI.PhotoViewer;
 
 public partial class App : Application
 {
-	public App()
-	{
-		InitializeComponent();
+    public App()
+    {
+        InitializeComponent();
 
-		MainPage = new AppShell();
-	}
+        MainPage = new InitialPage();
+    }
 
-	protected override async void OnStart()
-	{
-		base.OnStart();
+    protected override void OnStart()
+    {
+        base.OnStart();
 
-		FirebirdContextFactory.Initialize(FileSystem.Current.AppDataDirectory);
+        var initPage = (InitialPage?)MainPage ?? throw new NullReferenceException();
+        var initTask = Task.Run(() =>
+        {
+            initPage.Initialize();
 
-		await Task.Run(() =>
-		{
-			// DBの初期化
-			using (var context = FirebirdContextFactory.Create())
-			{
-                // DBテーブルを構成する
-                context.Database.Migrate();
-            }
-		});
-	}
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                MainPage = new RootShell();
+            });
+        });
+    }
 
 }
