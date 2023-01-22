@@ -1,11 +1,13 @@
 ﻿namespace love2hina.Windows.MAUI.PhotoViewer.Controls;
 
-public partial class AsyncImage : View
+public partial class AsyncImage : Grid
 {
 
     public AsyncImage()
     {
         InitializeComponent();
+
+        //var image = ImageSource.FromFile(@"noimage.png");
     }
 
     public static readonly BindableProperty TargetFileProperty =
