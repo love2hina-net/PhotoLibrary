@@ -1,12 +1,10 @@
-﻿using FirebirdSql.Data.FirebirdClient;
-using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
+﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Text;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Files;
 
@@ -77,52 +75,32 @@ public class FileCollection :
                     context.FileEntryCaches.AddRange(addEntities);
                     context.SaveChanges();
 
+                    var arrayId = (from entity in addEntities
+                                   select entity.Id).ToArray();
+
                     // 追加した要素のインデックス番号を取得
-                    var queryBuilder = new StringBuilder();
-                    var queryParam = new FbParameter[addEntities.Length + 1];
-                    queryParam[0] = new FbParameter(@"@directory", TargetDirectory.FullName);
-                    queryBuilder.Append("""
-                    SELECT
-                     "Id",
-                     "Directory",
-                     "IndexHash",
-                     "Path",
-                     "Index"
-                    FROM (
-                     SELECT
-                      "Id",
-                      "Directory",
-                      "IndexHash",
-                      "Path",
-                      ROW_NUMBER() OVER (ORDER BY "Path" ASC) - 1 AS "Index"
-                     FROM "FileEntryCaches"
-                     WHERE
-                      "Directory" = @directory
-                     ORDER BY
-                      "Path")
-                    WHERE
-                     "Id" IN (
-                    """);
-                    for (int i = 0; i < addEntities.Length; i++)
-                    {
-                        if (i > 0) queryBuilder.Append(@", ");
-                        queryBuilder.Append($"@id{i}");
-                        queryParam[i + 1] = new FbParameter($"@id{i}", addEntities[i].Id);
-                    }
-                    queryBuilder.Append("""
-                    )
-                    ORDER BY
-                     "Index" ASC
-                    """);
-
-                    var indexed = context.Set<FileEntryIndex>().
-                        FromSqlRaw(queryBuilder.ToString(), queryParam).AsNoTracking().ToArray();
-
-                    logger.LogTrace(indexed, "Changed items");
+                    var indexedEntities = (from entity in context.Set<FileEntryIndex>()
+                                            .FromSqlInterpolated($"""
+                                                SELECT
+                                                 "Id",
+                                                 "Directory",
+                                                 "IndexHash",
+                                                 "Path",
+                                                 ROW_NUMBER() OVER (ORDER BY "Path" ASC) - 1 AS "Index" 
+                                                FROM "FileEntryCaches" 
+                                                WHERE
+                                                 "Directory" = {TargetDirectory.FullName} 
+                                                ORDER BY
+                                                 "Path" ASC
+                                                """)
+                                           where arrayId.Contains(entity.Id)
+                                           orderby entity.Index ascending
+                                           select entity).AsNoTracking().ToArray();
+                    logger.LogTrace(indexedEntities, "Changed items");
 
                     // 変更を通知
-                    logger.LogInformation("Notify changed: {index}", indexed[0].Index);
-                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, indexed, indexed[0].Index));
+                    logger.LogDebug("Notify changed: {index}", indexedEntities[0].Index);
+                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, indexedEntities, indexedEntities[0].Index));
                 }
             }
 
