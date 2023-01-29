@@ -11,6 +11,21 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "FileEntryCaches",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Fb:ValueGenerationStrategy", FbValueGenerationStrategy.IdentityColumn),
+                    Directory = table.Column<string>(type: "VARCHAR(256)", nullable: false),
+                    IndexHash = table.Column<int>(type: "INTEGER", nullable: false),
+                    Path = table.Column<string>(type: "VARCHAR(256)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FileEntryCaches", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ThumbnailCaches",
                 columns: table => new
                 {
@@ -29,18 +44,26 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IDX_Date",
+                name: "IDX_FileEntryCache_Path",
+                table: "FileEntryCaches",
+                columns: new[] { "Directory", "Path" });
+
+            migrationBuilder.CreateIndex(
+                name: "IDX_ThumbnailCache_Date",
                 table: "ThumbnailCaches",
                 column: "LastReferenced");
 
             migrationBuilder.CreateIndex(
-                name: "IDX_Path",
+                name: "IDX_ThumbnailCache_Path",
                 table: "ThumbnailCaches",
                 columns: new[] { "IndexHash", "Path" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "FileEntryCaches");
+
             migrationBuilder.DropTable(
                 name: "ThumbnailCaches");
         }

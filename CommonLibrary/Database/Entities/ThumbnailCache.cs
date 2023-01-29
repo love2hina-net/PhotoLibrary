@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
 
-[Index(nameof(IndexHash), nameof(Path), Name = @"IDX_Path")]
-[Index(nameof(LastReferenced), Name = @"IDX_Date")]
+[Index(nameof(IndexHash), nameof(Path), Name = @"IDX_ThumbnailCache_Path")]
+[Index(nameof(LastReferenced), Name = @"IDX_ThumbnailCache_Date")]
 public class ThumbnailCache
 {
 

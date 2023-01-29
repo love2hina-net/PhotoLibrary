@@ -15,6 +15,8 @@ public class FirebirdContext : DbContext
 
     public DbSet<ThumbnailCache> ThumbnailCaches { get; set; }
 
+    public DbSet<FileEntryCache> FileEntryCaches { get; set; }
+
     private FirebirdContext() { throw new NotSupportedException(); }
 
     internal FirebirdContext(FileInfo database)
@@ -41,6 +43,18 @@ public class FirebirdContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<FileEntryIndex>().ToSqlQuery("""
+            SELECT
+             "Id",
+             "Directory",
+             "IndexHash",
+             "Path",
+             ROW_NUMBER() OVER (ORDER BY "Pash" ASC) AS "Index" 
+            FROM "FileEntryCaches" 
+            ORDER BY
+             "Path" ASC
+            """);
     }
 
 }

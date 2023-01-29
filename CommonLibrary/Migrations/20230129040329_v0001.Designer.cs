@@ -3,6 +3,7 @@ using System;
 using FirebirdSql.EntityFrameworkCore.Firebird.Metadata;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 
@@ -11,9 +12,10 @@ using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
 {
     [DbContext(typeof(FirebirdContext))]
-    partial class FirebirdContextModelSnapshot : ModelSnapshot
+    [Migration("20230129040329_v0001")]
+    partial class v0001
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
