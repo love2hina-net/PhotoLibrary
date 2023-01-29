@@ -38,6 +38,12 @@ public class FirebirdContext : DbContext
         optionsBuilder
             .UseLoggerFactory(loggerFactory)
             .UseFirebird(stringBuilder.ToString());
+
+#if DEBUG
+        optionsBuilder
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors();
+#endif
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,7 +56,7 @@ public class FirebirdContext : DbContext
              "Directory",
              "IndexHash",
              "Path",
-             ROW_NUMBER() OVER (ORDER BY "Pash" ASC) AS "Index" 
+             ROW_NUMBER() OVER (ORDER BY "Path" ASC) - 1 AS "Index" 
             FROM "FileEntryCaches" 
             ORDER BY
              "Path" ASC

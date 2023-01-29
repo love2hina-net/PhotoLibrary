@@ -33,16 +33,16 @@ public class FileCollection :
         logger = new LoggerFactory(new ILoggerProvider[] { new NLogLoggerProvider() }).CreateLogger<FileCollection>();
 
         TargetDirectory = directory;
-        enumrateTask = Task.Run(() => Enumerate(directory));
+        enumrateTask = Task.Run(Enumerate);
     }
 
-    private void Enumerate(DirectoryInfo directory)
+    private void Enumerate()
     {
         var list = new List<FileEntryCache>();
 
-        foreach (var file in directory.EnumerateFiles())
+        foreach (var file in TargetDirectory.EnumerateFiles())
         {
-            list.Add(new FileEntryCache(directory, file));
+            list.Add(new FileEntryCache(TargetDirectory, file));
 
             if (list.Count >= FETCH_COUNT)
             {
@@ -58,15 +58,19 @@ public class FileCollection :
 
         if (list.Count > 0)
         {
+            logger.LogTrace(list, "Requested append items");
+
             using (var context = FirebirdContextFactory.Create())
             {
                 // 追加するエンティティの抽出
                 var addEntities = (from newEntry in list
                                    join existsEntry in context.FileEntryCaches 
                                     on new { newEntry.Directory, newEntry.Path } equals new { existsEntry.Directory, existsEntry.Path } into joinGroup
-                                   from joinedEntry in joinGroup.DefaultIfEmpty()
+                                   from joinedEntry in joinGroup.DefaultIfEmpty(null)
                                    where joinedEntry == null
                                    select newEntry).ToArray();
+
+                logger.LogTrace(addEntities, "Actual append items");
 
                 if (addEntities.Length > 0) {
                     // 追加する
@@ -90,7 +94,7 @@ public class FileCollection :
                       "Directory",
                       "IndexHash",
                       "Path",
-                      ROW_NUMBER() OVER (ORDER BY "Path") AS "Index"
+                      ROW_NUMBER() OVER (ORDER BY "Path" ASC) - 1 AS "Index"
                      FROM "FileEntryCaches"
                      WHERE
                       "Directory" = @directory
@@ -108,13 +112,16 @@ public class FileCollection :
                     queryBuilder.Append("""
                     )
                     ORDER BY
-                     "Index"
+                     "Index" ASC
                     """);
 
                     var indexed = context.Set<FileEntryIndex>().
                         FromSqlRaw(queryBuilder.ToString(), queryParam).AsNoTracking().ToArray();
 
+                    logger.LogTrace(indexed, "Changed items");
+
                     // 変更を通知
+                    logger.LogInformation("Notify changed: {index}", indexed[0].Index);
                     CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, indexed, indexed[0].Index));
                 }
             }
@@ -125,29 +132,26 @@ public class FileCollection :
 
     protected FileEntryCache Get(int index)
     {
+        logger.LogInformation("Get item: {index}", index);
+
         using (var context = FirebirdContextFactory.Create())
         {
-            return context.FileEntryCaches.FromSqlInterpolated($"""
-                SELECT
-                 "Id",
-                 "Directory",
-                 "IndexHash",
-                 "Path"
-                FROM (
-                 SELECT
-                  "Id",
-                  "Directory",
-                  "IndexHash",
-                  "Path",
-                  ROW_NUMBER() OVER (ORDER BY "Path") AS "Index"
-                 FROM "FileEntryCaches"
-                 WHERE
-                  "Directory" = {TargetDirectory.FullName}
-                 ORDER BY
-                  "Path")
-                WHERE
-                 "Index" = {index}
-                """).AsNoTracking().First();
+            return (from entity in context.Set<FileEntryIndex>()
+                     .FromSqlInterpolated($"""
+                        SELECT
+                         "Id",
+                         "Directory",
+                         "IndexHash",
+                         "Path",
+                         ROW_NUMBER() OVER (ORDER BY "Path" ASC) - 1 AS "Index" 
+                        FROM "FileEntryCaches" 
+                        WHERE
+                         "Directory" = {TargetDirectory.FullName} 
+                        ORDER BY
+                         "Path" ASC
+                        """)
+                     where entity.Index == index
+                     select entity).First();
         }
     }
 
@@ -165,10 +169,16 @@ public class FileCollection :
     {
         get
         {
+            int count;
             using (var context = FirebirdContextFactory.Create())
             {
-                return context.Database.ExecuteSqlInterpolated($"SELECT COUNT(*) FROM \"FileEntryCaches\"");
+                count = (from entity in context.FileEntryCaches
+                         where entity.Directory == TargetDirectory.FullName
+                         select entity).Count();
             }
+
+            logger.LogInformation("Get count: {count}", count);
+            return count;
         }
     }
 
@@ -272,5 +282,40 @@ public class FileCollection :
     public void CopyTo(FileEntryCache[] array, int index) => CopyToImpl(array, index);
 
     void System.Collections.ICollection.CopyTo(Array array, int index) => CopyToImpl((FileEntryCache[])array, index);
+
+}
+
+internal static class LoggerExtension
+{
+
+    public static void LogTrace(this ILogger logger, IReadOnlyList<FileEntryCache> entities, string? message = null)
+    {
+        if (logger.IsEnabled(LogLevel.Trace))
+        {
+            logger.LogTrace(@">>> {message} {type} array dump begin, count: {count}.", message ?? "", nameof(FileEntryCache), entities.Count);
+
+            foreach (var entity in entities)
+            {
+                logger.LogTrace(@"--- Path: {Path}", entity.Path);
+            }
+
+            logger.LogTrace(@"<<< {message} {type} array dump end.", message ?? "", nameof(FileEntryCache));
+        }
+    }
+
+    public static void LogTrace(this ILogger logger, IReadOnlyList<FileEntryIndex> entities, string? message = null)
+    {
+        if (logger.IsEnabled(LogLevel.Trace))
+        {
+            logger.LogTrace(@">>> {message} {type} array dump begin, count: {count}.", message ?? "", nameof(FileEntryIndex), entities.Count);
+
+            foreach (var entity in entities)
+            {
+                logger.LogTrace(@"--- Index: {Index}, Path: {Path}", entity.Index, entity.Path);
+            }
+
+            logger.LogTrace(@"<<< {message} {type} array dump end.", message ?? "", nameof(FileEntryIndex));
+        }
+    }
 
 }

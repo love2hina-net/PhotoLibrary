@@ -12,7 +12,7 @@ using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
 {
     [DbContext(typeof(FirebirdContext))]
-    [Migration("20230129040329_v0001")]
+    [Migration("20230129133007_v0001")]
     partial class v0001
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,7 +69,7 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
 
                     b.HasIndex(new[] { "Directory", "Path" }, "IDX_FileEntryCache_Path");
 
-                    b.ToSqlQuery("SELECT\r\n \"Id\",\r\n \"Directory\",\r\n \"IndexHash\",\r\n \"Path\",\r\n ROW_NUMBER() OVER (ORDER BY \"Pash\" ASC) AS \"Index\" \r\nFROM \"FileEntryCaches\" \r\nORDER BY\r\n \"Path\" ASC");
+                    b.ToSqlQuery("SELECT\r\n \"Id\",\r\n \"Directory\",\r\n \"IndexHash\",\r\n \"Path\",\r\n ROW_NUMBER() OVER (ORDER BY \"Path\" ASC) - 1 AS \"Index\" \r\nFROM \"FileEntryCaches\" \r\nORDER BY\r\n \"Path\" ASC");
                 });
 
             modelBuilder.Entity("love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities.ThumbnailCache", b =>
