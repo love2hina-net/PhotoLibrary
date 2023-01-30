@@ -7,7 +7,7 @@ public class Initializer
 
     static Initializer()
     {
-        FirebirdContextFactory.Initialize(Environment.CurrentDirectory);
+        FirebirdContextFactory.Initialize(Environment.CurrentDirectory, true);
     }
 
 }

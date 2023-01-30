@@ -49,7 +49,7 @@ public static class ThumbnailLoader
 
         if (image != null)
         {
-            cache = new ThumbnailCache(file.FullName)
+            cache = new ThumbnailCache(file)
             {
                 Width = (int)image.Width,
                 Height = (int)image.Height,

@@ -22,7 +22,7 @@
                 </Grid.ColumnDefinitions>
                 <controls:AsyncImage Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" />
                 <Label Grid.Column="1" Grid.Row="0"
-                       Text="{Binding Path}" />
+                       Text="{Binding Name}" />
             </Grid>
         </DataTemplate>
     </CollectionView.ItemTemplate>

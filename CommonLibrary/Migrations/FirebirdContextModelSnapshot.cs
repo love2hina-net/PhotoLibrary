@@ -30,18 +30,20 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
 
                     b.Property<string>("Directory")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(256)");
+                        .HasMaxLength(1024)
+                        .HasColumnType("VARCHAR(1024)");
 
                     b.Property<int>("IndexHash")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Path")
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(256)");
+                        .HasMaxLength(260)
+                        .HasColumnType("VARCHAR(260)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Directory", "Path" }, "IDX_FileEntryCache_Path");
+                    b.HasIndex(new[] { "Directory", "Name" }, "IDX_FileEntryCache_Path");
 
                     b.ToTable("FileEntryCaches");
                 });
@@ -50,7 +52,8 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                 {
                     b.Property<string>("Directory")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(256)");
+                        .HasMaxLength(1024)
+                        .HasColumnType("VARCHAR(1024)");
 
                     b.Property<int>("Id")
                         .HasColumnType("INTEGER");
@@ -61,13 +64,14 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                     b.Property<int>("IndexHash")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Path")
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(256)");
+                        .HasMaxLength(260)
+                        .HasColumnType("VARCHAR(260)");
 
-                    b.HasIndex(new[] { "Directory", "Path" }, "IDX_FileEntryCache_Path");
+                    b.HasIndex(new[] { "Directory", "Name" }, "IDX_FileEntryCache_Path");
 
-                    b.ToSqlQuery("SELECT\r\n \"Id\",\r\n \"Directory\",\r\n \"IndexHash\",\r\n \"Path\",\r\n ROW_NUMBER() OVER (ORDER BY \"Path\" ASC) - 1 AS \"Index\" \r\nFROM \"FileEntryCaches\" \r\nORDER BY\r\n \"Path\" ASC");
+                    b.ToSqlQuery("SELECT\r\n \"Id\",\r\n \"Directory\",\r\n \"IndexHash\",\r\n \"Name\",\r\n ROW_NUMBER() OVER (ORDER BY \"Name\" ASC) - 1 AS \"Index\" \r\nFROM \"FileEntryCaches\" \r\nORDER BY\r\n \"Name\" ASC");
                 });
 
             modelBuilder.Entity("love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities.ThumbnailCache", b =>
@@ -88,7 +92,8 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
 
                     b.Property<string>("Path")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(256)");
+                        .HasMaxLength(1024)
+                        .HasColumnType("VARCHAR(1024)");
 
                     b.Property<byte[]>("PngData")
                         .HasColumnType("BLOB SUB_TYPE BINARY");

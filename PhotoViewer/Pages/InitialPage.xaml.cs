@@ -14,7 +14,7 @@ public partial class InitialPage : ContentPage
     public void Initialize()
     {
         // コンテキストの初期化
-        FirebirdContextFactory.Initialize(FileSystem.Current.AppDataDirectory);
+        FirebirdContextFactory.Initialize(FileSystem.Current.AppDataDirectory, false);
 
         // DBの初期化
         using (var context = FirebirdContextFactory.Create())

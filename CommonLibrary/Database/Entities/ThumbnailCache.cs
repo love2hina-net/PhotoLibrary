@@ -20,6 +20,7 @@ public class ThumbnailCache
 
     /** ファイルフルパス */
     [Required]
+    [MaxLength(1024)]
     public virtual string Path { get; set; }
 
     /** キャッシュを使用した日付 */
@@ -37,10 +38,10 @@ public class ThumbnailCache
         Path = string.Empty;
     }
 
-    public ThumbnailCache(string path)
+    public ThumbnailCache(FileInfo file)
     {
-        Path = path;
-        IndexHash = path.GetHashCode();
+        Path = file.FullName;
+        IndexHash = file.FullName.GetHashCode();
         LastReferenced = DateTime.Now;
     }
 

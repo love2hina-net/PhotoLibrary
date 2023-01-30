@@ -1,7 +1,7 @@
-﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
+﻿using FirebirdSql.Data.FirebirdClient;
+using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
 using System.Text;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database;
@@ -9,7 +9,7 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 public class FirebirdContext : DbContext
 {
 
-    private static readonly LoggerFactory loggerFactory = new (new ILoggerProvider[] { new NLogLoggerProvider() });
+    private readonly LoggerFactory? loggerFactory;
 
     private readonly FileInfo databaseFile;
 
@@ -19,8 +19,9 @@ public class FirebirdContext : DbContext
 
     private FirebirdContext() { throw new NotSupportedException(); }
 
-    internal FirebirdContext(FileInfo database)
+    internal FirebirdContext(FileInfo database, LoggerFactory? logger)
     {
+        loggerFactory = logger;
         databaseFile = database;
     }
 
@@ -30,14 +31,27 @@ public class FirebirdContext : DbContext
 
         var stringBuilder = new StringBuilder();
 
-        // 
+        // 接続文字列の作成 
         stringBuilder.Append($"database=localhost:{databaseFile.FullName};");
         stringBuilder.Append(@"user=sysdba;");
         stringBuilder.Append(@"password=admin;");
+        var connstr = stringBuilder.ToString();
 
-        optionsBuilder
-            .UseLoggerFactory(loggerFactory)
-            .UseFirebird(stringBuilder.ToString());
+        if (!databaseFile.Exists)
+        {
+            // Firebirdプロセスでファイルを作ると、存在判定ができない
+            using (var stream = databaseFile.Create()) { }
+            Thread.Sleep(100);
+
+            // DBファイルの作成
+            FbConnection.CreateDatabase(connstr, 32768, true, true);
+        }
+        optionsBuilder.UseFirebird(connstr);
+
+        if (loggerFactory != null)
+        {
+            optionsBuilder.UseLoggerFactory(loggerFactory);
+        }
 
 #if DEBUG
         optionsBuilder
@@ -55,11 +69,11 @@ public class FirebirdContext : DbContext
              "Id",
              "Directory",
              "IndexHash",
-             "Path",
-             ROW_NUMBER() OVER (ORDER BY "Path" ASC) - 1 AS "Index" 
+             "Name",
+             ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
             FROM "FileEntryCaches" 
             ORDER BY
-             "Path" ASC
+             "Name" ASC
             """);
     }
 

@@ -63,7 +63,7 @@ public class FileCollection :
                 // 追加するエンティティの抽出
                 var addEntities = (from newEntry in list
                                    join existsEntry in context.FileEntryCaches 
-                                    on new { newEntry.Directory, newEntry.Path } equals new { existsEntry.Directory, existsEntry.Path } into joinGroup
+                                    on new { newEntry.Directory, newEntry.Name } equals new { existsEntry.Directory, existsEntry.Name } into joinGroup
                                    from joinedEntry in joinGroup.DefaultIfEmpty(null)
                                    where joinedEntry == null
                                    select newEntry).ToArray();
@@ -85,13 +85,13 @@ public class FileCollection :
                                                  "Id",
                                                  "Directory",
                                                  "IndexHash",
-                                                 "Path",
-                                                 ROW_NUMBER() OVER (ORDER BY "Path" ASC) - 1 AS "Index" 
+                                                 "Name",
+                                                 ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
                                                 FROM "FileEntryCaches" 
                                                 WHERE
                                                  "Directory" = {TargetDirectory.FullName} 
                                                 ORDER BY
-                                                 "Path" ASC
+                                                 "Name" ASC
                                                 """)
                                            where arrayId.Contains(entity.Id)
                                            orderby entity.Index ascending
@@ -120,13 +120,13 @@ public class FileCollection :
                          "Id",
                          "Directory",
                          "IndexHash",
-                         "Path",
-                         ROW_NUMBER() OVER (ORDER BY "Path" ASC) - 1 AS "Index" 
+                         "Name",
+                         ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
                         FROM "FileEntryCaches" 
                         WHERE
                          "Directory" = {TargetDirectory.FullName} 
                         ORDER BY
-                         "Path" ASC
+                         "Name" ASC
                         """)
                      where entity.Index == index
                      select entity).First();
@@ -241,7 +241,7 @@ public class FileCollection :
                  "Id",
                  "Directory",
                  "IndexHash",
-                 "Path",
+                 "Name",
                 FROM "FileEntryCaches"
                 """).AsNoTracking().GetEnumerator();
         }
@@ -274,7 +274,7 @@ internal static class LoggerExtension
 
             foreach (var entity in entities)
             {
-                logger.LogTrace(@"--- Path: {Path}", entity.Path);
+                logger.LogTrace(@"--- Name: {Name}", entity.Name);
             }
 
             logger.LogTrace(@"<<< {message} {type} array dump end.", message ?? "", nameof(FileEntryCache));
@@ -289,7 +289,7 @@ internal static class LoggerExtension
 
             foreach (var entity in entities)
             {
-                logger.LogTrace(@"--- Index: {Index}, Path: {Path}", entity.Index, entity.Path);
+                logger.LogTrace(@"--- Index: {Index}, Name: {Name}", entity.Index, entity.Name);
             }
 
             logger.LogTrace(@"<<< {message} {type} array dump end.", message ?? "", nameof(FileEntryIndex));

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
 
-[Index(nameof(Directory), nameof(Path), Name = @"IDX_FileEntryCache_Path")]
+[Index(nameof(Directory), nameof(Name), Name = @"IDX_FileEntryCache_Path")]
 public class FileEntryCache
 {
 
@@ -11,31 +11,32 @@ public class FileEntryCache
 
     /** ディレクトリパス */
     [Required]
+    [MaxLength(1024)]
     public virtual string Directory { get; set; }
+
+    /** ファイル名 */
+    [Required]
+    [MaxLength(260)]
+    public virtual string Name { get; set; }
 
     /**
      * インデックスハッシュ値.
      * 
      * フルパスのハッシュ値
      */
-    [Required]
     public virtual int IndexHash { get; set; }
-
-    /** ファイルフルパス */
-    [Required]
-    public virtual string Path { get; set; }
 
     public FileEntryCache()
     {
         Directory = string.Empty;
-        Path = string.Empty;
+        Name = string.Empty;
     }
 
     public FileEntryCache(DirectoryInfo parent, FileInfo file)
     {
         Directory = parent.FullName;
-        Path = file.FullName;
-        IndexHash = Path.GetHashCode();
+        Name = file.Name;
+        IndexHash = file.FullName.GetHashCode();
     }
 
 }
