@@ -49,10 +49,13 @@ public partial class DirectoryView : CollectionView
         }
     }
 
-    async void CollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    async void DirectoryView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         var dir = e.CurrentSelection.FirstOrDefault() as string;
-        await Shell.Current.GoToAsync($"directory?TargetDirectory={dir}", false);
+        if (dir != null)
+        {
+            await Shell.Current.GoToAsync($"directory?TargetDirectory={dir}", false);
+        }
     }
 
 }

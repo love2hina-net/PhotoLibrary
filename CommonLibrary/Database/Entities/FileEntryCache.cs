@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
 
@@ -19,12 +20,11 @@ public class FileEntryCache
     [MaxLength(260)]
     public virtual string Name { get; set; }
 
-    /**
-     * インデックスハッシュ値.
-     * 
-     * フルパスのハッシュ値
-     */
-    public virtual int IndexHash { get; set; }
+    [NotMapped]
+    public virtual FileInfo Path
+    {
+        get => new FileInfo(System.IO.Path.Combine(Directory, Name));
+    }
 
     public FileEntryCache()
     {
@@ -36,7 +36,6 @@ public class FileEntryCache
     {
         Directory = parent.FullName;
         Name = file.Name;
-        IndexHash = file.FullName.GetHashCode();
     }
 
 }

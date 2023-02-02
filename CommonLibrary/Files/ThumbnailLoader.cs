@@ -9,9 +9,9 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Files;
 public static class ThumbnailLoader
 {
 
-    public static async Task<ThumbnailCache?> GetThumbnail(FileInfo file)
+    public static Task<ThumbnailCache?> GetThumbnail(FileInfo file)
     {
-        return await Task.Run(() =>
+        return Task.Run(() =>
         {
             ThumbnailCache? cache = null;
 
@@ -20,7 +20,7 @@ public static class ThumbnailLoader
                 using (var context = FirebirdContextFactory.Create())
                 {
                     var query = from thumb in context.ThumbnailCaches.AsNoTracking()
-                                where (thumb.IndexHash == file.FullName.GetHashCode()) && (thumb.Path == file.FullName)
+                                where thumb.Path == file.FullName
                                 select thumb;
                     cache = query.FirstOrDefault();
                 }
@@ -43,8 +43,9 @@ public static class ThumbnailLoader
 
         using (var stream = file.OpenRead())
         {
-            image = SkiaImage.FromStream(stream)
-                ?.Resize(256.0f, 256.0f, ResizeMode.Bleed, true);
+            image = SkiaImage.FromStream(stream);
+                // TODO: リサイズすると吹っ飛ぶ
+                //?.Resize(256.0f, 256.0f, ResizeMode.Bleed, true);
         }
 
         if (image != null)

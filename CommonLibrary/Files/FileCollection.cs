@@ -84,7 +84,6 @@ public class FileCollection :
                                                 SELECT
                                                  "Id",
                                                  "Directory",
-                                                 "IndexHash",
                                                  "Name",
                                                  ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
                                                 FROM "FileEntryCaches" 
@@ -119,7 +118,6 @@ public class FileCollection :
                         SELECT
                          "Id",
                          "Directory",
-                         "IndexHash",
                          "Name",
                          ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
                         FROM "FileEntryCaches" 
@@ -240,7 +238,6 @@ public class FileCollection :
                 SELECT
                  "Id",
                  "Directory",
-                 "IndexHash",
                  "Name",
                 FROM "FileEntryCaches"
                 """).AsNoTracking().GetEnumerator();

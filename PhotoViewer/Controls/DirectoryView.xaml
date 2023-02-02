@@ -5,5 +5,5 @@
                 BindingContext="{Binding Source={RelativeSource Self}}"
                 ItemsSource="{Binding Directories}"
                 SelectionMode="Single"
-                SelectionChanged="CollectionView_SelectionChanged">
+                SelectionChanged="DirectoryView_SelectionChanged">
 </CollectionView>

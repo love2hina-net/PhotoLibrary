@@ -17,8 +17,7 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Fb:ValueGenerationStrategy", FbValueGenerationStrategy.IdentityColumn),
                     Directory = table.Column<string>(type: "VARCHAR(1024)", maxLength: 1024, nullable: false),
-                    Name = table.Column<string>(type: "VARCHAR(260)", maxLength: 260, nullable: false),
-                    IndexHash = table.Column<int>(type: "INTEGER", nullable: false)
+                    Name = table.Column<string>(type: "VARCHAR(260)", maxLength: 260, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,7 +30,6 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Fb:ValueGenerationStrategy", FbValueGenerationStrategy.IdentityColumn),
-                    IndexHash = table.Column<int>(type: "INTEGER", nullable: false),
                     Path = table.Column<string>(type: "VARCHAR(1024)", maxLength: 1024, nullable: false),
                     LastReferenced = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     Width = table.Column<int>(type: "INTEGER", nullable: true),
@@ -56,7 +54,7 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
             migrationBuilder.CreateIndex(
                 name: "IDX_ThumbnailCache_Path",
                 table: "ThumbnailCaches",
-                columns: new[] { "IndexHash", "Path" });
+                column: "Path");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

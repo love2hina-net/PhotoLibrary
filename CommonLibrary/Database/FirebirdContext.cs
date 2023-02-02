@@ -68,7 +68,6 @@ public class FirebirdContext : DbContext
             SELECT
              "Id",
              "Directory",
-             "IndexHash",
              "Name",
              ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
             FROM "FileEntryCaches" 

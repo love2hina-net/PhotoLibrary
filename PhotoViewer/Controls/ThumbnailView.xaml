@@ -20,7 +20,8 @@
                     <ColumnDefinition Width="100" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <controls:AsyncImage Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" />
+                <controls:AsyncImage Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                                     TargetFile="{Binding Path}" />
                 <Label Grid.Column="1" Grid.Row="0"
                        Text="{Binding Name}" />
             </Grid>

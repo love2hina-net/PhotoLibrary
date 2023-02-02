@@ -33,9 +33,6 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("VARCHAR(1024)");
 
-                    b.Property<int>("IndexHash")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(260)
@@ -61,9 +58,6 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                     b.Property<int>("Index")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("IndexHash")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(260)
@@ -71,7 +65,7 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
 
                     b.HasIndex(new[] { "Directory", "Name" }, "IDX_FileEntryCache_Path");
 
-                    b.ToSqlQuery("SELECT\r\n \"Id\",\r\n \"Directory\",\r\n \"IndexHash\",\r\n \"Name\",\r\n ROW_NUMBER() OVER (ORDER BY \"Name\" ASC) - 1 AS \"Index\" \r\nFROM \"FileEntryCaches\" \r\nORDER BY\r\n \"Name\" ASC");
+                    b.ToSqlQuery("SELECT\r\n \"Id\",\r\n \"Directory\",\r\n \"Name\",\r\n ROW_NUMBER() OVER (ORDER BY \"Name\" ASC) - 1 AS \"Index\" \r\nFROM \"FileEntryCaches\" \r\nORDER BY\r\n \"Name\" ASC");
                 });
 
             modelBuilder.Entity("love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities.ThumbnailCache", b =>
@@ -82,9 +76,6 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                         .HasAnnotation("Fb:ValueGenerationStrategy", FbValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("Height")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("IndexHash")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("LastReferenced")
@@ -105,7 +96,7 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
 
                     b.HasIndex(new[] { "LastReferenced" }, "IDX_ThumbnailCache_Date");
 
-                    b.HasIndex(new[] { "IndexHash", "Path" }, "IDX_ThumbnailCache_Path");
+                    b.HasIndex(new[] { "Path" }, "IDX_ThumbnailCache_Path");
 
                     b.ToTable("ThumbnailCaches");
                 });

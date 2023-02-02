@@ -3,20 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
 
-[Index(nameof(IndexHash), nameof(Path), Name = @"IDX_ThumbnailCache_Path")]
+[Index(nameof(Path), Name = @"IDX_ThumbnailCache_Path")]
 [Index(nameof(LastReferenced), Name = @"IDX_ThumbnailCache_Date")]
 public class ThumbnailCache
 {
 
     public virtual int Id { get; set; }
-
-    /**
-     * インデックスハッシュ値.
-     * 
-     * フルパスのハッシュ値
-     */
-    [Required]
-    public virtual int IndexHash { get; set; }
 
     /** ファイルフルパス */
     [Required]
@@ -41,7 +33,6 @@ public class ThumbnailCache
     public ThumbnailCache(FileInfo file)
     {
         Path = file.FullName;
-        IndexHash = file.FullName.GetHashCode();
         LastReferenced = DateTime.Now;
     }
 
