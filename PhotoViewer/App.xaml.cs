@@ -11,6 +11,15 @@ public partial class App : Application
         MainPage = new InitialPage();
     }
 
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        var window = base.CreateWindow(activationState);
+
+        window.Title = @"ネコ写真部の大図書館 - a good library for photography club and cats.";
+
+        return window;
+    }
+
     protected override void OnStart()
     {
         base.OnStart();

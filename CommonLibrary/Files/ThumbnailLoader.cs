@@ -24,12 +24,18 @@ public static class ThumbnailLoader
                                 where thumb.Path == file.FullName
                                 select thumb;
                     cache = query.FirstOrDefault();
-                }
 
-                if (cache == null)
-                {
-                    // 読み込み処理
-                    cache = LoadBitmapData(file);
+                    if (cache == null)
+                    {
+                        // 読み込み処理
+                        cache = LoadBitmapData(context, file);
+                    }
+                    else
+                    {
+                        // 利用更新
+                        cache.UpdateReference();
+                        context.SaveChanges();
+                    }
                 }
             }
 
@@ -37,7 +43,7 @@ public static class ThumbnailLoader
         });
     }
 
-    private static ThumbnailCache? LoadBitmapData(FileInfo file)
+    private static ThumbnailCache? LoadBitmapData(FirebirdContext context, FileInfo file)
     {
         ThumbnailCache? cache = null;
         IImage? image = null;
@@ -53,23 +59,20 @@ public static class ThumbnailLoader
             var rate = Math.Min(Math.Min(256.0f / image.Width, 256.0f / image.Height), 1.0f);
             var size = new SizeF(image.Width * rate, image.Height * rate);
 
-            using (var context = new SkiaBitmapExportContext((int)size.Width, (int)size.Height, 1))
+            using (var thumbnail = new SkiaBitmapExportContext((int)size.Width, (int)size.Height, 1))
             {
-                context.Canvas.DrawImage(image, 0, 0, size.Width, size.Height);
+                thumbnail.Canvas.DrawImage(image, 0, 0, size.Width, size.Height);
 
                 cache = new ThumbnailCache(file)
                 {
                     Width = (int)size.Width,
                     Height = (int)size.Height,
-                    PngData = context.AsBytes(ImageFormat.Png)
+                    PngData = thumbnail.AsBytes(ImageFormat.Png)
                 };
             }
 
-            using (var context = FirebirdContextFactory.Create())
-            {
-                context.ThumbnailCaches.Add(cache);
-                context.SaveChanges();
-            }
+            context.ThumbnailCaches.Add(cache);
+            context.SaveChanges();
         }
 
         return cache;

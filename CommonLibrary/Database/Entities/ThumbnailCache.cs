@@ -36,4 +36,9 @@ public class ThumbnailCache
         LastReferenced = DateTime.Now;
     }
 
+    public void UpdateReference()
+    {
+        LastReferenced = DateTime.Now;
+    }
+
 }
