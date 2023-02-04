@@ -1,12 +1,15 @@
 ﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
+using love2hina.Windows.MAUI.PhotoViewer.Common.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Graphics.Skia;
 using SkiaSharp;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Files;
 
+[DeclareService(ServiceLifetime.Singleton)]
 public class ThumbnailLoader
 {
 
@@ -86,7 +89,7 @@ public class ThumbnailLoader
     }
 }
 
-internal static class SkiaBitmapExportContextExtension
+internal static class SkiaBitmapExportContextExtensions
 {
 
     internal static byte[]? AsBytes(this SkiaBitmapExportContext target, ImageFormat format = ImageFormat.Png, float quality = 1.0f)

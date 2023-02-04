@@ -1,9 +1,7 @@
 ﻿namespace love2hina.Windows.MAUI.PhotoViewer;
 
 using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
-using love2hina.Windows.MAUI.PhotoViewer.Common.Files;
-using love2hina.Windows.MAUI.PhotoViewer.Controls;
-using love2hina.Windows.MAUI.PhotoViewer.Pages;
+using love2hina.Windows.MAUI.PhotoViewer.Common.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Foldable;
@@ -12,6 +10,7 @@ using NLog.Extensions.Logging;
 public static class MauiProgram
 {
 
+    // TODO: これなくしたい
     public static IServiceProvider Services { get; private set; }
 
     public static MauiApp CreateMauiApp()
@@ -25,13 +24,11 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             })
             .UseFoldable()
-            .Services.AddSingleton<ThumbnailLoader>()
-                     .AddTransient<ThumbnailView>()
-                     .AddSingleton<InitialPage>()
-                     .AddSingleton<RootShell>()
+            .Services.AddFromAssemblies()
                      .AddSingleton<IDatabaseConfig>(new DatabaseConfig(FileSystem.Current.AppDataDirectory))
                      .AddDbContextFactory<FirebirdContext>();
 
+        // ログの設定
         builder.Logging.AddNLog();
 #if DEBUG
         builder.Logging.AddDebug();
