@@ -1,13 +1,20 @@
-﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
+﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
+using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
 using love2hina.Windows.MAUI.PhotoViewer.Common.Files;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Controls;
 
 public partial class ThumbnailView : CollectionView
 {
 
+    protected IServiceProvider Services { get; private set; }
+
     public ThumbnailView()
     {
+        Services = MauiProgram.Services;
+
         InitializeComponent();
     }
 
@@ -26,7 +33,10 @@ public partial class ThumbnailView : CollectionView
         {
             if (TargetDirectory != null)
             {
-                return new FileCollection(new DirectoryInfo(TargetDirectory));
+                return new FileCollection(
+                    Services.GetRequiredService<IDbContextFactory<FirebirdContext>>(),
+                    Services.GetRequiredService<ILoggerFactory>(),
+                    new DirectoryInfo(TargetDirectory));
             }
             else
             {

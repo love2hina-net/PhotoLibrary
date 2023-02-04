@@ -8,8 +8,12 @@ public partial class AsyncImage : Grid
 
     public static readonly string[] EXT = { ".jpg", ".png" };
 
+    protected IServiceProvider Services { get; private set; }
+
     public AsyncImage()
     {
+        Services = MauiProgram.Services;
+
         InitializeComponent();
     }
 
@@ -26,7 +30,8 @@ public partial class AsyncImage : Grid
     {
         if ((TargetFile?.Exists ?? false) && (EXT.Contains(TargetFile.Extension.ToLower())))
         {
-            var loadTask = ThumbnailLoader.GetThumbnail(TargetFile)
+            var thumbnailLoader = Services.GetRequiredService<ThumbnailLoader>();
+            var loadTask = thumbnailLoader.GetThumbnail(TargetFile)
                 .ContinueWith((t) =>
                 {
                     ThumbnailCache cache = t.Result!;

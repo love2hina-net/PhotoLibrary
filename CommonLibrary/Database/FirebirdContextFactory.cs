@@ -1,40 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 
-public static class FirebirdContextFactory
+public interface IDatabaseConfig
+{
+    FileInfo DatabaseFile { get; }
+}
+
+public class DatabaseConfig : IDatabaseConfig
 {
 
-    private static FileInfo? databaseFile;
+    public FileInfo DatabaseFile { get; private set; }
 
-    private static LoggerFactory? loggerFactory;
-
-    public static FileInfo DatabaseFile
+    public DatabaseConfig(string directory)
     {
-        get => databaseFile ?? throw new InvalidOperationException();
+        Directory.CreateDirectory(directory);
+        DatabaseFile = new FileInfo(Path.Combine(directory, @"LIBRARY.FDB"));
     }
-
-    public static void Initialize(string directory, bool designTime)
-    {
-        if (databaseFile == null)
-        {
-            Directory.CreateDirectory(directory);
-            databaseFile = new FileInfo(Path.Combine(directory, @"LIBRARY.FDB"));
-
-            if (!designTime)
-            {
-                loggerFactory = new(new ILoggerProvider[] { new NLogLoggerProvider() });
-            }
-        }
-        else
-        {
-            throw new InvalidOperationException();
-        }
-    }
-
-    public static FirebirdContext Create() => new FirebirdContext(DatabaseFile, loggerFactory);
 
 }
 
@@ -43,8 +25,8 @@ public class FirebirdContextDesignTimeFactory : IDesignTimeDbContextFactory<Fire
 
     public FirebirdContext CreateDbContext(string[] args)
     {
-        FirebirdContextFactory.Initialize(Environment.CurrentDirectory, true);
-        return FirebirdContextFactory.Create();
+        var config = new DatabaseConfig(Environment.CurrentDirectory);
+        return new FirebirdContext(config, null);
     }
 
 }

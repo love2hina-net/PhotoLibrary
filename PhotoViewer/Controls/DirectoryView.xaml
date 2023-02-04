@@ -6,4 +6,13 @@
                 ItemsSource="{Binding Directories}"
                 SelectionMode="Single"
                 SelectionChanged="DirectoryView_SelectionChanged">
+
+    <CollectionView.ItemsLayout>
+        <LinearItemsLayout Orientation="Vertical" />
+    </CollectionView.ItemsLayout>
+    <CollectionView.ItemTemplate>
+        <DataTemplate>
+            <Label Text="{Binding Name}" />
+        </DataTemplate>
+    </CollectionView.ItemTemplate>
 </CollectionView>

@@ -6,18 +6,19 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Pages;
 public partial class InitialPage : ContentPage
 {
 
-    public InitialPage()
+    protected IDbContextFactory<FirebirdContext> DbContextFactory { get; private set; }
+
+    public InitialPage(IDbContextFactory<FirebirdContext> dbContextFactory)
     {
+        DbContextFactory = dbContextFactory;
+
         InitializeComponent();
     }
 
     public void Initialize()
     {
-        // コンテキストの初期化
-        FirebirdContextFactory.Initialize(FileSystem.Current.AppDataDirectory, false);
-
         // DBの初期化
-        using (var context = FirebirdContextFactory.Create())
+        using (var context = DbContextFactory.CreateDbContext())
         {
             // DBテーブルを構成する
             context.Database.Migrate();

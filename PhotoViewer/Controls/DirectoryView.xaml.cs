@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using System.Security;
+﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Files;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Controls;
 
@@ -20,59 +19,22 @@ public partial class DirectoryView : CollectionView
         set => SetValue(TargetDirectoryProperty, value);
     }
 
-    public IEnumerable<string> Directories
+    public DirectoryCollection Directories
     {
         get
         {
-            IEnumerable<DirectoryInfo> directories;
-
-            if (TargetDirectory != null)
-            {
-                directories = new DirectoryInfo(TargetDirectory).EnumerateDirectories();
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                // Windowsはドライブの一覧を起点とする
-                directories = from d in DriveInfo.GetDrives()
-                              where d.IsReady
-                              select d.RootDirectory;
-            }
-            else
-            {
-                // macOSはルートディレクトリを起点とする
-                directories = new DirectoryInfo("/").EnumerateDirectories();
-            }
-
-            return from d in directories
-                   where d.IsAccessable()
-                   select d.FullName;
+            var path = TargetDirectory;
+            return new DirectoryCollection((path != null) ? new DirectoryInfo(path) : null);
         }
     }
 
     async void DirectoryView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var dir = e.CurrentSelection.FirstOrDefault() as string;
+        var dir = e.CurrentSelection.FirstOrDefault() as DirectoryInfo;
         if (dir != null)
         {
-            await Shell.Current.GoToAsync($"directory?TargetDirectory={dir}", false);
-        }
-    }
-
-}
-
-internal static class DirectoriInfoExtends
-{
-
-    public static bool IsAccessable(this DirectoryInfo directory)
-    {
-        try
-        {
-            directory.EnumerateFiles().FirstOrDefault();
-            return true;
-        }
-        catch (SystemException e) when (e is SecurityException || e is UnauthorizedAccessException)
-        {
-            return false;
+            SelectedItem = null;
+            await Shell.Current.GoToAsync($"directory?TargetDirectory={dir.FullName}", false);
         }
     }
 

@@ -7,10 +7,17 @@ using SkiaSharp;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Files;
 
-public static class ThumbnailLoader
+public class ThumbnailLoader
 {
 
-    public static Task<ThumbnailCache?> GetThumbnail(FileInfo file)
+    protected IDbContextFactory<FirebirdContext> DbContextFactory { get; private set; }
+
+    public ThumbnailLoader(IDbContextFactory<FirebirdContext> dbContextFactory)
+    {
+        DbContextFactory = dbContextFactory;
+    }
+
+    public Task<ThumbnailCache?> GetThumbnail(FileInfo file)
     {
         return Task.Run(() =>
         {
@@ -18,7 +25,7 @@ public static class ThumbnailLoader
 
             if (file.Exists)
             {
-                using (var context = FirebirdContextFactory.Create())
+                using (var context = DbContextFactory.CreateDbContext())
                 {
                     var query = from thumb in context.ThumbnailCaches.AsNoTracking()
                                 where thumb.Path == file.FullName
@@ -43,7 +50,7 @@ public static class ThumbnailLoader
         });
     }
 
-    private static ThumbnailCache? LoadBitmapData(FirebirdContext context, FileInfo file)
+    private ThumbnailCache? LoadBitmapData(FirebirdContext context, FileInfo file)
     {
         ThumbnailCache? cache = null;
         IImage? image = null;
@@ -77,6 +84,10 @@ public static class ThumbnailLoader
 
         return cache;
     }
+}
+
+internal static class SkiaBitmapExportContextExtension
+{
 
     internal static byte[]? AsBytes(this SkiaBitmapExportContext target, ImageFormat format = ImageFormat.Png, float quality = 1.0f)
     {

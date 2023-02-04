@@ -9,7 +9,7 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 public class FirebirdContext : DbContext
 {
 
-    private readonly LoggerFactory? loggerFactory;
+    private readonly ILoggerFactory? loggerFactory;
 
     private readonly FileInfo databaseFile;
 
@@ -17,12 +17,10 @@ public class FirebirdContext : DbContext
 
     public DbSet<FileEntryCache> FileEntryCaches { get; set; }
 
-    private FirebirdContext() { throw new NotSupportedException(); }
-
-    internal FirebirdContext(FileInfo database, LoggerFactory? logger)
+    public FirebirdContext(IDatabaseConfig config, ILoggerFactory? loggerFactory)
     {
-        loggerFactory = logger;
-        databaseFile = database;
+        databaseFile = config.DatabaseFile;
+        this.loggerFactory = loggerFactory;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

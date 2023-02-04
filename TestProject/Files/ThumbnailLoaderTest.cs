@@ -4,13 +4,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Test.Files;
 
-public class ThumbnailLoaderTest : Initializer
+public class ThumbnailLoaderTest : Startup
 {
+
+    private IDbContextFactory<FirebirdContext> DbContextFactory { get; set; }
+
+    private ThumbnailLoader ThumbnailLoader { get; set; }
+
+    public ThumbnailLoaderTest(
+        IDbContextFactory<FirebirdContext> dbContextFactory,
+        ThumbnailLoader thumbnailLoader)
+    {
+        DbContextFactory = dbContextFactory;
+        ThumbnailLoader = thumbnailLoader;
+    }
 
     [Fact]
     public async void Test()
     {
-        using (var context = FirebirdContextFactory.Create())
+        using (var context = DbContextFactory.CreateDbContext())
         {
             context.Database.Migrate();
 

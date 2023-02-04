@@ -2,7 +2,6 @@
 using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
@@ -20,15 +19,21 @@ public class FileCollection :
 
     protected readonly Task enumrateTask;
 
+    protected IDbContextFactory<FirebirdContext> DbContextFactory { get; private set; }
+
     public DirectoryInfo TargetDirectory { get; private set; }
 
     public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public FileCollection(DirectoryInfo directory)
+    public FileCollection(
+        IDbContextFactory<FirebirdContext> dbContextFactory,
+        ILoggerFactory loggerFactory,
+        DirectoryInfo directory)
     {
-        logger = new LoggerFactory(new ILoggerProvider[] { new NLogLoggerProvider() }).CreateLogger<FileCollection>();
+        DbContextFactory = dbContextFactory;
+        logger = loggerFactory.CreateLogger<FileCollection>();
 
         TargetDirectory = directory;
         enumrateTask = Task.Run(Enumerate);
@@ -58,7 +63,7 @@ public class FileCollection :
         {
             logger.LogTrace(list, "Requested append items");
 
-            using (var context = FirebirdContextFactory.Create())
+            using (var context = DbContextFactory.CreateDbContext())
             {
                 // 追加するエンティティの抽出
                 var addEntities = (from newEntry in list
@@ -111,7 +116,7 @@ public class FileCollection :
     {
         logger.LogInformation("Get item: {index}", index);
 
-        using (var context = FirebirdContextFactory.Create())
+        using (var context = DbContextFactory.CreateDbContext())
         {
             return (from entity in context.Set<FileEntryIndex>()
                      .FromSqlInterpolated($"""
@@ -146,7 +151,7 @@ public class FileCollection :
         get
         {
             int count;
-            using (var context = FirebirdContextFactory.Create())
+            using (var context = DbContextFactory.CreateDbContext())
             {
                 count = (from entity in context.FileEntryCaches
                          where entity.Directory == TargetDirectory.FullName
@@ -232,7 +237,7 @@ public class FileCollection :
 
     private IEnumerator<FileEntryCache> GetEnumeratorImpl()
     {
-        using (var context = FirebirdContextFactory.Create())
+        using (var context = DbContextFactory.CreateDbContext())
         {
             return context.FileEntryCaches.FromSqlInterpolated($"""
                 SELECT
