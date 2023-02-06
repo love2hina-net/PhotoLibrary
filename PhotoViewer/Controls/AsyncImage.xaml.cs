@@ -1,21 +1,26 @@
 ﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
+using love2hina.Windows.MAUI.PhotoViewer.Common.DependencyInjection;
 using love2hina.Windows.MAUI.PhotoViewer.Common.Files;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Controls;
 
+[DeclareService(ServiceLifetime.Transient)]
 public partial class AsyncImage : Grid
 {
 
     public static readonly string[] EXT = { ".jpg", ".png" };
 
-    protected IServiceProvider Services { get; private set; }
+    protected readonly ThumbnailLoader thumbnailLoader;
 
-    public AsyncImage()
+    public AsyncImage(ThumbnailLoader thumbnailLoader)
     {
-        Services = MauiProgram.Services;
+        this.thumbnailLoader = thumbnailLoader;
 
         InitializeComponent();
     }
+
+    public static AsyncImage Create()
+        => ControlLoader.Create<AsyncImage>();
 
     public static readonly BindableProperty TargetFileProperty =
         BindableProperty.Create(nameof(TargetFile), typeof(FileInfo), typeof(AsyncImage),
@@ -30,7 +35,6 @@ public partial class AsyncImage : Grid
     {
         if ((TargetFile?.Exists ?? false) && (EXT.Contains(TargetFile.Extension.ToLower())))
         {
-            var thumbnailLoader = Services.GetRequiredService<ThumbnailLoader>();
             var loadTask = thumbnailLoader.GetThumbnail(TargetFile)
                 .ContinueWith((t) =>
                 {

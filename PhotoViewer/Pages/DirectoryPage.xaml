@@ -15,6 +15,7 @@
         </foldable:TwoPaneView.Pane1>
         <foldable:TwoPaneView.Pane2>
             <controls:ThumbnailView
+                x:FactoryMethod="Create"
                 x:Name="thumbnail"
                 TargetDirectory="{Binding Source={x:Reference parent}, Path=TargetDirectory}"/>
         </foldable:TwoPaneView.Pane2>

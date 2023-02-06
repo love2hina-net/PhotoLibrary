@@ -13,11 +13,11 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Files;
 public class ThumbnailLoader
 {
 
-    protected IDbContextFactory<FirebirdContext> DbContextFactory { get; private set; }
+    protected readonly IDbContextFactory<FirebirdContext> dbContextFactory;
 
     public ThumbnailLoader(IDbContextFactory<FirebirdContext> dbContextFactory)
     {
-        DbContextFactory = dbContextFactory;
+        this.dbContextFactory = dbContextFactory;
     }
 
     public Task<ThumbnailCache?> GetThumbnail(FileInfo file)
@@ -28,7 +28,7 @@ public class ThumbnailLoader
 
             if (file.Exists)
             {
-                using (var context = DbContextFactory.CreateDbContext())
+                using (var context = dbContextFactory.CreateDbContext())
                 {
                     var query = from thumb in context.ThumbnailCaches.AsNoTracking()
                                 where thumb.Path == file.FullName

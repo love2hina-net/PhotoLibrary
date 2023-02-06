@@ -5,15 +5,15 @@ namespace love2hina.Windows.MAUI.PhotoViewer;
 public partial class App : Application
 {
 
-    protected IServiceProvider Services { get; private set; }
+    protected readonly IServiceProvider services;
 
     public App(IServiceProvider services)
     {
-        Services = services;
+        this.services = services;
 
         InitializeComponent();
 
-        MainPage = Services.GetRequiredService<InitialPage>();
+        MainPage = services.GetRequiredService<InitialPage>();
     }
 
     protected override Window CreateWindow(IActivationState? activationState)
@@ -36,7 +36,7 @@ public partial class App : Application
 
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                MainPage = Services.GetRequiredService<RootShell>();
+                MainPage = services.GetRequiredService<RootShell>();
             });
         });
     }

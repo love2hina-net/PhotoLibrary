@@ -19,7 +19,7 @@ public class FirebirdContext : DbContext
 
     public FirebirdContext(IDatabaseConfig config, ILoggerFactory? loggerFactory)
     {
-        databaseFile = config.DatabaseFile;
+        this.databaseFile = config.DatabaseFile;
         this.loggerFactory = loggerFactory;
     }
 

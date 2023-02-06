@@ -15,11 +15,11 @@ public class FileCollection :
 
     protected const int FETCH_COUNT = 10;
 
+    protected readonly IDbContextFactory<FirebirdContext> dbContextFactory;
+
     protected readonly ILogger logger;
 
     protected readonly Task enumrateTask;
-
-    protected IDbContextFactory<FirebirdContext> DbContextFactory { get; private set; }
 
     public DirectoryInfo TargetDirectory { get; private set; }
 
@@ -32,7 +32,7 @@ public class FileCollection :
         ILoggerFactory loggerFactory,
         DirectoryInfo directory)
     {
-        DbContextFactory = dbContextFactory;
+        this.dbContextFactory = dbContextFactory;
         logger = loggerFactory.CreateLogger<FileCollection>();
 
         TargetDirectory = directory;
@@ -63,7 +63,7 @@ public class FileCollection :
         {
             logger.LogTrace(list, "Requested append items");
 
-            using (var context = DbContextFactory.CreateDbContext())
+            using (var context = dbContextFactory.CreateDbContext())
             {
                 // 追加するエンティティの抽出
                 var addEntities = (from newEntry in list
@@ -116,7 +116,7 @@ public class FileCollection :
     {
         logger.LogInformation("Get item: {index}", index);
 
-        using (var context = DbContextFactory.CreateDbContext())
+        using (var context = dbContextFactory.CreateDbContext())
         {
             return (from entity in context.Set<FileEntryIndex>()
                      .FromSqlInterpolated($"""
@@ -151,7 +151,7 @@ public class FileCollection :
         get
         {
             int count;
-            using (var context = DbContextFactory.CreateDbContext())
+            using (var context = dbContextFactory.CreateDbContext())
             {
                 count = (from entity in context.FileEntryCaches
                          where entity.Directory == TargetDirectory.FullName
@@ -237,7 +237,7 @@ public class FileCollection :
 
     private IEnumerator<FileEntryCache> GetEnumeratorImpl()
     {
-        using (var context = DbContextFactory.CreateDbContext())
+        using (var context = dbContextFactory.CreateDbContext())
         {
             return context.FileEntryCaches.FromSqlInterpolated($"""
                 SELECT
