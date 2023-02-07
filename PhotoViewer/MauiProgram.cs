@@ -10,9 +10,6 @@ using NLog.Extensions.Logging;
 public static class MauiProgram
 {
 
-    // TODO: これなくしたい
-    public static IServiceProvider Services { get; private set; }
-
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
@@ -35,8 +32,6 @@ public static class MauiProgram
 #endif
         builder.Services.AddLogging();
 
-        var app = builder.Build();
-        Services = app.Services;
-        return app;
+        return builder.Build();
     }
 }

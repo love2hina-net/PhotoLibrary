@@ -4,6 +4,6 @@ public static class ControlLoader
 {
 
     public static T Create<T>() where T : notnull
-        => MauiProgram.Services.GetRequiredService<T>();
+        => IPlatformApplication.Current!.Services.GetRequiredService<T>();
 
 }
