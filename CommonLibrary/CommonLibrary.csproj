@@ -12,10 +12,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="FirebirdSql.EntityFrameworkCore.Firebird" Version="9.1.0" />
+    <PackageReference Include="FirebirdSql.EntityFrameworkCore.Firebird" Version="9.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Maui.Graphics" Version="7.0.52" />
-    <PackageReference Include="Microsoft.Maui.Graphics.Skia" Version="7.0.52" />
+    <PackageReference Include="Microsoft.Maui.Graphics" Version="7.0.59" />
+    <PackageReference Include="Microsoft.Maui.Graphics.Skia" Version="7.0.59" />
     <PackageReference Include="NLog.Extensions.Logging" Version="5.2.1" />
   </ItemGroup>
   <ItemGroup>
