@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <Platforms>x64;x86</Platforms>
     <TargetFrameworks>net7.0-maccatalyst</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net7.0-windows10.0.19041.0;$(TargetFrameworks)</TargetFrameworks>
     <OutputType>Exe</OutputType>

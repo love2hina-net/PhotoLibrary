@@ -1,9 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <Platforms>x64;x86</Platforms>
     <TargetFrameworks>net7.0</TargetFrameworks>
     <RootNamespace>love2hina.Windows.MAUI.PhotoViewer.Common</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <FBPath>$(SolutionDir)\bin\build\$(Platform)-$(Configuration)\firebird\$(Configuration)</FBPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.13" />
@@ -19,6 +22,29 @@
     <PackageReference Include="NLog.Extensions.Logging" Version="5.2.1" />
   </ItemGroup>
   <ItemGroup>
+    <Firebird Include="$(FBPath)\intl\fbintl.conf">
+      <Link>intl\%(FileName)%(Extension)</Link>
+    </Firebird>
+    <Firebird Include="$(FBPath)\intl\fbintl.dll">
+      <Link>intl\%(FileName)%(Extension)</Link>
+    </Firebird>
+    <Firebird Include="$(FBPath)\plugins\engine13.dll">
+      <Link>plugins\%(FileName)%(Extension)</Link>
+    </Firebird>
+    <Firebird Include="$(FBPath)\firebird.conf" />
+    <Firebird Include="$(FBPath)\firebird.msg" />
+    <Firebird Include="$(FBPath)\fbclient.dll" />
+    <Firebird Include="$(FBPath)\ib_util.dll" />
+    <Firebird Include="$(FBPath)\icudt63l.dat" />
+    <Firebird Include="$(FBPath)\icudt63.dll" />
+    <Firebird Include="$(FBPath)\icuin63.dll" />
+    <Firebird Include="$(FBPath)\icuuc63.dll" />
+    <Firebird Include="$(FBPath)\msvcp140.dll" />
+    <Firebird Include="$(FBPath)\vcruntime140.dll" />
+
+    <None Include="@(Firebird)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
