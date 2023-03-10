@@ -30,6 +30,8 @@ public class FirebirdContext : DbContext
         var stringBuilder = new StringBuilder();
 
         // 接続文字列の作成 
+        stringBuilder.Append(@"servertype=1;");
+        stringBuilder.Append(@"clientlibrary=fbclient;");
         stringBuilder.Append($"database=localhost:{databaseFile.FullName};");
         stringBuilder.Append(@"user=sysdba;");
         stringBuilder.Append(@"password=admin;");
@@ -37,10 +39,6 @@ public class FirebirdContext : DbContext
 
         if (!databaseFile.Exists)
         {
-            // Firebirdプロセスでファイルを作ると、存在判定ができない
-            using (var stream = databaseFile.Create()) { }
-            Thread.Sleep(100);
-
             // DBファイルの作成
             FbConnection.CreateDatabase(connstr, 32768, true, true);
         }
