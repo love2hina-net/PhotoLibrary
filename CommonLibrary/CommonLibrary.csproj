@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
-    <FBPath>$(SolutionDir)\bin\build\$(Platform)-$(Configuration)\firebird\exec\main</FBPath>
+    <FBPath>$(SolutionDir)\bin\build\win-$(Platform)-$(Configuration)\firebird\exec\main</FBPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.13" />
