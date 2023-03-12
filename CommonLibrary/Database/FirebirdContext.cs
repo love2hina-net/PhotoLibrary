@@ -13,6 +13,8 @@ public class FirebirdContext : DbContext
 
     private readonly FileInfo databaseFile;
 
+    public DbSet<CustomRootEntry> CustomRootEntries { get; set; }
+
     public DbSet<ThumbnailCache> ThumbnailCaches { get; set; }
 
     public DbSet<FileEntryCache> FileEntryCaches { get; set; }

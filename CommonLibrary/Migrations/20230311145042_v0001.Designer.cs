@@ -12,7 +12,7 @@ using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
 {
     [DbContext(typeof(FirebirdContext))]
-    [Migration("20230202135836_v0001")]
+    [Migration("20230311145042_v0001")]
     partial class v0001
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,6 +22,28 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                 .HasAnnotation("Fb:ValueGenerationStrategy", FbValueGenerationStrategy.IdentityColumn)
                 .HasAnnotation("ProductVersion", "6.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 31);
+
+            modelBuilder.Entity("love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities.CustomRootEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Fb:ValueGenerationStrategy", FbValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("VARCHAR(260)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("VARCHAR(1024)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CustomRootEntries");
+                });
 
             modelBuilder.Entity("love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities.FileEntryCache", b =>
                 {

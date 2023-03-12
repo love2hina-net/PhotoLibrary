@@ -11,6 +11,20 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "CustomRootEntries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Fb:ValueGenerationStrategy", FbValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "VARCHAR(260)", maxLength: 260, nullable: false),
+                    Path = table.Column<string>(type: "VARCHAR(1024)", maxLength: 1024, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomRootEntries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FileEntryCaches",
                 columns: table => new
                 {
@@ -59,6 +73,9 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CustomRootEntries");
+
             migrationBuilder.DropTable(
                 name: "FileEntryCaches");
 

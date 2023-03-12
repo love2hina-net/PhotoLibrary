@@ -6,6 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+    <!-- for ef core migrations -->
+    <Platform Condition="'$(Platform)' != 'x64' And '$(Platform)' != 'x86'">x64</Platform>
+    <SolutionDir Condition="'$(SolutionDir)' == ''">$(MSBuildThisFileDirectory)\..</SolutionDir>
     <FBPath>$(SolutionDir)\bin\build\win-$(Platform)-$(Configuration)\firebird\exec\main</FBPath>
   </PropertyGroup>
   <ItemGroup>

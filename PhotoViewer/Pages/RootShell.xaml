@@ -1,7 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:pages="clr-namespace:love2hina.Windows.MAUI.PhotoViewer.Pages"
+       xmlns:configs="clr-namespace:love2hina.Windows.MAUI.PhotoViewer.Pages.Configs"
        xmlns:views="clr-namespace:love2hina.Windows.MAUI.PhotoViewer.Views"
        x:Class="love2hina.Windows.MAUI.PhotoViewer.Pages.RootShell"
        Shell.FlyoutBehavior="Flyout">
@@ -10,6 +11,10 @@
         Route="viewer"
         Title="ビューワー"
         ContentTemplate="{DataTemplate pages:ViewerRootPage}" />
+    <ShellContent
+        Route="config"
+        Title="設定"
+        ContentTemplate="{DataTemplate configs:CustomRootPage}" />
     <ShellContent
         Title="About"
         ContentTemplate="{DataTemplate views:AboutPage}" />

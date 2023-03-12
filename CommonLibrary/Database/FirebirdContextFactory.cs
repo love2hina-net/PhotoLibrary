@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Design;
+using System.Runtime.InteropServices;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 
@@ -20,11 +21,25 @@ public class DatabaseConfig : IDatabaseConfig
 
 }
 
+public static class NativeMethods
+{
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool SetDllDirectory(
+        [MarshalAs(UnmanagedType.LPWStr), In, Optional] string? lpPathName);
+
+}
+
 public class FirebirdContextDesignTimeFactory : IDesignTimeDbContextFactory<FirebirdContext>
 {
 
     public FirebirdContext CreateDbContext(string[] args)
     {
+        // for ef core migrations
+        var dirPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(FirebirdContextDesignTimeFactory))!.Location);
+        NativeMethods.SetDllDirectory(dirPath);
+
         var config = new DatabaseConfig(Environment.CurrentDirectory);
         return new FirebirdContext(config, null);
     }

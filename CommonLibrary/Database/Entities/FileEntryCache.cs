@@ -13,12 +13,12 @@ public class FileEntryCache
     /** ディレクトリパス */
     [Required]
     [MaxLength(1024)]
-    public virtual string Directory { get; set; }
+    public virtual string Directory { get; set; } = string.Empty;
 
     /** ファイル名 */
     [Required]
     [MaxLength(260)]
-    public virtual string Name { get; set; }
+    public virtual string Name { get; set; } = string.Empty;
 
     [NotMapped]
     public virtual FileInfo Path
@@ -28,8 +28,6 @@ public class FileEntryCache
 
     public FileEntryCache()
     {
-        Directory = string.Empty;
-        Name = string.Empty;
     }
 
     public FileEntryCache(DirectoryInfo parent, FileInfo file)

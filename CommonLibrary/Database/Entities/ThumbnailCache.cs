@@ -13,11 +13,11 @@ public class ThumbnailCache
     /** ファイルフルパス */
     [Required]
     [MaxLength(1024)]
-    public virtual string Path { get; set; }
+    public virtual string Path { get; set; } = string.Empty;
 
     /** キャッシュを使用した日付 */
     [Required]
-    public virtual DateTime LastReferenced { get; set; }
+    public virtual DateTime LastReferenced { get; set; } = DateTime.MinValue;
 
     public virtual int? Width { get; set; }
 
@@ -27,7 +27,6 @@ public class ThumbnailCache
 
     public ThumbnailCache()
     {
-        Path = string.Empty;
     }
 
     public ThumbnailCache(FileInfo file)

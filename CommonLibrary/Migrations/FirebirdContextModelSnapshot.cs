@@ -21,6 +21,28 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                 .HasAnnotation("ProductVersion", "6.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 31);
 
+            modelBuilder.Entity("love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities.CustomRootEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Fb:ValueGenerationStrategy", FbValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("VARCHAR(260)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("VARCHAR(1024)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CustomRootEntries");
+                });
+
             modelBuilder.Entity("love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities.FileEntryCache", b =>
                 {
                     b.Property<int>("Id")
