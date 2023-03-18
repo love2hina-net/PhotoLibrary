@@ -1,4 +1,4 @@
-﻿using FirebirdSql.Data.FirebirdClient;
+using FirebirdSql.Data.FirebirdClient;
 using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -41,6 +41,10 @@ public class FirebirdContext : DbContext
 
         if (!databaseFile.Exists)
         {
+            // Firebirdプロセスでファイルを作ると、存在判定ができない
+            using (var stream = databaseFile.Create()) { }
+            Thread.Sleep(100);
+
             // DBファイルの作成
             FbConnection.CreateDatabase(connstr, 32768, true, true);
         }

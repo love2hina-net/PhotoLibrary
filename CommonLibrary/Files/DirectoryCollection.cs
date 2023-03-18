@@ -1,6 +1,7 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Security;
+using love2hina.Windows.MAUI.PhotoViewer.Common.Extensions;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 
@@ -43,13 +44,9 @@ public class DirectoryCollection : ObservableCollection<DirectoryInfo>
             directories = new DirectoryInfo("/").EnumerateDirectories();
         }
 
-        foreach (var d in directories)
-        {
-            if (d.IsAccessable())
-            {
-                Add(d);
-            }
-        }
+        (from d in directories
+         where d.IsAccessable()
+         select d).ForEach(d => Add(d));
     }
 
 }
