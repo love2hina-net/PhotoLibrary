@@ -11,23 +11,29 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <Label
             Grid.Row="0" Grid.Column="0"
             Text="名前" />
         <Editor
-            Grid.Row="0" Grid.Column="1"
-            Text="{Binding RootEntry.Name}" />
+            Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+            Text="{Binding Path=Name, Mode=TwoWay}" />
         <Label
             Grid.Row="1" Grid.Column="0"
             Text="パス" />
         <Editor
-            Grid.Row="1" Grid.Column="1"
-            Text="{Binding RootEntry.Path}" />
+            Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+            Text="{Binding Path=Path, Mode=TwoWay}" />
+        <Button
+            Grid.Row="2" Grid.Column="2"
+            Text="保存"
+            Clicked="Button_Clicked" />
     </Grid>
 </ContentPage>
