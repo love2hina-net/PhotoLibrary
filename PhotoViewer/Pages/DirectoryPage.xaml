@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:foldable="clr-namespace:Microsoft.Maui.Controls.Foldable;assembly=Microsoft.Maui.Controls.Foldable"
@@ -10,8 +10,9 @@
     <foldable:TwoPaneView>
         <foldable:TwoPaneView.Pane1>
             <controls:DirectoryView
+                x:FactoryMethod="Create"
                 x:Name="directory"
-                TargetDirectory="{Binding Source={x:Reference parent}, Path=TargetDirectory}" />
+                TargetDirectory="{Binding Source={x:Reference parent}, Path=TargetDirectory}"/>
         </foldable:TwoPaneView.Pane1>
         <foldable:TwoPaneView.Pane2>
             <controls:ThumbnailView

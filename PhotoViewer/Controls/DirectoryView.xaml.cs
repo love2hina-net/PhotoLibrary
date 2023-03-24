@@ -1,14 +1,23 @@
-﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Files;
+using love2hina.Windows.MAUI.PhotoViewer.Common.DependencyInjection;
+using love2hina.Windows.MAUI.PhotoViewer.Common.Files;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Controls;
 
-public partial class DirectoryView : CollectionView
+[DeclareService(ServiceLifetime.Transient)]
+public partial class DirectoryView : CollectionViewEx
 {
 
-    public DirectoryView()
+    private readonly DirectoryCollectionFactory factory;
+
+    public DirectoryView(DirectoryCollectionFactory factory)
     {
+        this.factory = factory;
+
         InitializeComponent();
     }
+
+    public static DirectoryView Create()
+        => ControlLoader.Create<DirectoryView>();
 
     public static readonly BindableProperty TargetDirectoryProperty =
         BindableProperty.Create(nameof(TargetDirectory), typeof(string), typeof(DirectoryView),
@@ -24,16 +33,15 @@ public partial class DirectoryView : CollectionView
         get
         {
             var path = TargetDirectory;
-            return new DirectoryCollection((path != null) ? new DirectoryInfo(path) : null);
+            return factory.Create((path != null) ? new DirectoryInfo(path) : null);
         }
     }
 
-    async void DirectoryView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void DirectoryView_Tapped(object sender, TappedEventArgs e)
     {
-        var dir = e.CurrentSelection.FirstOrDefault() as DirectoryInfo;
+        var dir = SelectedItem as DirectoryInfo;
         if (dir != null)
         {
-            SelectedItem = null;
             await Shell.Current.GoToAsync($"directory?TargetDirectory={dir.FullName}", false);
         }
     }

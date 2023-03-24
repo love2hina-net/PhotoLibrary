@@ -1,4 +1,4 @@
-﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
+using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,11 +15,15 @@ public class FileCollection :
 
     protected const int FETCH_COUNT = 10;
 
+    protected const int BUFFER_COUNT = 100;
+
     protected readonly IDbContextFactory<FirebirdContext> dbContextFactory;
 
     protected readonly ILogger logger;
 
     protected readonly Task enumrateTask;
+
+    //protected FileEntryIndex[]? readBuffer = null;
 
     public DirectoryInfo TargetDirectory { get; private set; }
 
@@ -114,26 +118,68 @@ public class FileCollection :
 
     protected FileEntryCache Get(int index)
     {
-        logger.LogInformation("Get item: {index}", index);
+        logger.LogTrace("Get item: {index}", index);
 
-        using (var context = dbContextFactory.CreateDbContext())
-        {
-            return (from entity in context.Set<FileEntryIndex>()
-                     .FromSqlInterpolated($"""
-                        SELECT
-                         "Id",
-                         "Directory",
-                         "Name",
-                         ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
-                        FROM "FileEntryCaches" 
-                        WHERE
-                         "Directory" = {TargetDirectory.FullName} 
-                        ORDER BY
-                         "Name" ASC
-                        """)
-                     where entity.Index == index
-                     select entity).First();
-        }
+        using var context = dbContextFactory.CreateDbContext();
+        return (from entity in context.Set<FileEntryIndex>()
+                    .FromSqlInterpolated($"""
+                    SELECT
+                        "Id",
+                        "Directory",
+                        "Name",
+                        ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
+                    FROM "FileEntryCaches" 
+                    WHERE
+                        "Directory" = {TargetDirectory.FullName} 
+                    ORDER BY
+                        "Name" ASC
+                    """)
+                where entity.Index == index
+                select entity).First();
+
+        // TODO
+        //int indexFrom = 0;
+        //int? indexRead = index;
+
+        //logger.LogTrace("Get item: {index}", index);
+
+        //if (readBuffer != null)
+        //{
+        //    indexFrom = readBuffer[0].Index;
+        //    int indexLast = indexFrom + readBuffer.Length;
+
+        //    // 
+        //    if ((indexFrom <= index) && (index < indexLast)) {
+        //        indexRead = null;
+        //    }
+        //}
+
+        //if (indexRead != null)
+        //{
+        //    using var context = dbContextFactory.CreateDbContext();
+
+        //    readBuffer = (from entity in context.Set<FileEntryIndex>()
+        //                  .FromSqlInterpolated($"""
+        //                    SELECT
+        //                     "Id",
+        //                     "Directory",
+        //                     "Name",
+        //                     ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
+        //                    FROM "FileEntryCaches" 
+        //                    WHERE
+        //                     "Directory" = {TargetDirectory.FullName} 
+        //                    ORDER BY
+        //                     "Name" ASC
+        //                    """)
+        //                  select entity)
+        //                 .Skip((int)indexRead)
+        //                 .Take(BUFFER_COUNT)
+        //                 .ToArray();
+
+        //    indexFrom = (int)indexRead;
+        //}
+
+        //return readBuffer![index - indexFrom];
     }
 
     public bool IsReadOnly => false;
@@ -158,7 +204,7 @@ public class FileCollection :
                          select entity).Count();
             }
 
-            logger.LogInformation("Get count: {count}", count);
+            logger.LogTrace("Get count: {count}", count);
             return count;
         }
     }

@@ -18,8 +18,9 @@ public partial class CustomRootPage : ContentPage
 
     public CustomRootPage(IDbContextFactory<FirebirdContext> dbContextFactory)
     {
-        InitializeComponent();
         m_dbContextFactory = dbContextFactory;
+
+        InitializeComponent();
 
         Routing.RegisterRoute("config/edit", typeof(CustomRootEditPage));
 

@@ -56,9 +56,6 @@
     <MauiXaml Update="Controls\AsyncImage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
-    <MauiXaml Update="Controls\CollectionViewEx.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
     <MauiXaml Update="Controls\DirectoryView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>

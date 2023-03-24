@@ -18,9 +18,9 @@ public partial class CustomRootEditPage : ContentPage
 
     public CustomRootEditPage(IDbContextFactory<FirebirdContext> dbContextFactory)
     {
-        InitializeComponent();
-
         m_dbContextFactory = dbContextFactory;
+
+        InitializeComponent();
     }
 
     public static CustomRootEditPage Create()

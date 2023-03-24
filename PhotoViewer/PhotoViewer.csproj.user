@@ -12,9 +12,6 @@
     <MauiXaml Update="Controls\AsyncImage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Controls\CollectionViewEx.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
     <MauiXaml Update="Controls\DirectoryView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
