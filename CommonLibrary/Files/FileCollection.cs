@@ -47,6 +47,8 @@ public class FileCollection :
     {
         var list = new List<FileEntryCache>();
 
+        Thread.Sleep(1000);
+
         foreach (var file in TargetDirectory.EnumerateFiles())
         {
             list.Add(new FileEntryCache(TargetDirectory, file));
@@ -54,6 +56,7 @@ public class FileCollection :
             if (list.Count >= FETCH_COUNT)
             {
                 AddFiles(list);
+                Thread.Sleep(100);
             }
         }
 
