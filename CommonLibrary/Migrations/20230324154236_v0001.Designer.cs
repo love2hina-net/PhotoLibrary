@@ -12,7 +12,7 @@ using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
 {
     [DbContext(typeof(FirebirdContext))]
-    [Migration("20230311145042_v0001")]
+    [Migration("20230324154236_v0001")]
     partial class v0001
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,6 +57,9 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("VARCHAR(1024)");
 
+                    b.Property<DateTime>("LastReferenced")
+                        .HasColumnType("TIMESTAMP");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(260)
@@ -64,7 +67,7 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Directory", "Name" }, "IDX_FileEntryCache_Path");
+                    b.HasIndex(new[] { "Directory", "LastReferenced", "Name" }, "IDX_FileEntryCache_Path");
 
                     b.ToTable("FileEntryCaches");
                 });
@@ -82,14 +85,17 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                     b.Property<int>("Index")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("LastReferenced")
+                        .HasColumnType("TIMESTAMP");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(260)
                         .HasColumnType("VARCHAR(260)");
 
-                    b.HasIndex(new[] { "Directory", "Name" }, "IDX_FileEntryCache_Path");
+                    b.HasIndex(new[] { "Directory", "LastReferenced", "Name" }, "IDX_FileEntryCache_Path");
 
-                    b.ToSqlQuery("SELECT\r\n \"Id\",\r\n \"Directory\",\r\n \"Name\",\r\n ROW_NUMBER() OVER (ORDER BY \"Name\" ASC) - 1 AS \"Index\" \r\nFROM \"FileEntryCaches\" \r\nORDER BY\r\n \"Name\" ASC");
+                    b.ToSqlQuery("SELECT\r\n \"Id\",\r\n \"Directory\",\r\n \"LastReferenced\",\r\n \"Name\",\r\n ROW_NUMBER() OVER (ORDER BY \"Name\" ASC) - 1 AS \"Index\" \r\nFROM \"FileEntryCaches\" \r\nORDER BY\r\n \"Name\" ASC");
                 });
 
             modelBuilder.Entity("love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities.ThumbnailCache", b =>

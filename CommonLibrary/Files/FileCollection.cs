@@ -1,5 +1,6 @@
 using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
+using love2hina.Windows.MAUI.PhotoViewer.Common.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Specialized;
@@ -15,15 +16,13 @@ public class FileCollection :
 
     protected const int FETCH_COUNT = 10;
 
-    protected const int BUFFER_COUNT = 100;
-
     protected readonly IDbContextFactory<FirebirdContext> dbContextFactory;
 
     protected readonly ILogger logger;
 
-    protected readonly Task enumrateTask;
+    protected readonly DateTime timeStamp;
 
-    //protected FileEntryIndex[]? readBuffer = null;
+    protected readonly Task enumrateTask;
 
     public DirectoryInfo TargetDirectory { get; private set; }
 
@@ -38,6 +37,7 @@ public class FileCollection :
     {
         this.dbContextFactory = dbContextFactory;
         logger = loggerFactory.CreateLogger<FileCollection>();
+        timeStamp = DateTime.UtcNow;
 
         TargetDirectory = directory;
         enumrateTask = Task.Run(Enumerate);
@@ -70,22 +70,30 @@ public class FileCollection :
             using (var context = dbContextFactory.CreateDbContext())
             {
                 // 追加するエンティティの抽出
-                var addEntities = (from newEntry in list
-                                   join existsEntry in context.FileEntryCaches 
-                                    on new { newEntry.Directory, newEntry.Name } equals new { existsEntry.Directory, existsEntry.Name } into joinGroup
-                                   from joinedEntry in joinGroup.DefaultIfEmpty(null)
-                                   where joinedEntry == null
-                                   select newEntry).ToArray();
+                var updateEntities = (from newEntry in list
+                                      join existsEntry in context.FileEntryCaches 
+                                       on new { newEntry.Directory, newEntry.Name } equals new { existsEntry.Directory, existsEntry.Name } into joinGroup
+                                      from joinedEntry in joinGroup.DefaultIfEmpty(null)
+                                      where (joinedEntry == null) || (joinedEntry.LastReferenced != timeStamp)
+                                      select new { IsNew = (joinedEntry == null), Entry = joinedEntry ?? newEntry }).ToArray();
 
-                logger.LogTrace(addEntities, "Actual append items");
+                //logger.LogTrace(updateEntities, "Actual append or update items");
 
-                if (addEntities.Length > 0) {
-                    // 追加する
-                    context.FileEntryCaches.AddRange(addEntities);
+                if (updateEntities.Length > 0) {
+                    updateEntities.ForEach(e => {
+                        // 更新する
+                        e.Entry.LastReferenced = timeStamp;
+
+                        if (e.IsNew)
+                        {
+                            // 追加する
+                            context.FileEntryCaches.Add(e.Entry);
+                        }
+                    });
                     context.SaveChanges();
 
-                    var arrayId = (from entity in addEntities
-                                   select entity.Id).ToArray();
+                    var arrayId = (from entity in updateEntities
+                                   select entity.Entry.Id).ToArray();
 
                     // 追加した要素のインデックス番号を取得
                     var indexedEntities = (from entity in context.Set<FileEntryIndex>()
@@ -93,11 +101,13 @@ public class FileCollection :
                                                 SELECT
                                                  "Id",
                                                  "Directory",
+                                                 "LastReferenced",
                                                  "Name",
                                                  ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
                                                 FROM "FileEntryCaches" 
                                                 WHERE
-                                                 "Directory" = {TargetDirectory.FullName} 
+                                                 "Directory" = {TargetDirectory.FullName} AND
+                                                 "LastReferenced" = {timeStamp} 
                                                 ORDER BY
                                                  "Name" ASC
                                                 """)
@@ -124,62 +134,20 @@ public class FileCollection :
         return (from entity in context.Set<FileEntryIndex>()
                     .FromSqlInterpolated($"""
                     SELECT
-                        "Id",
-                        "Directory",
-                        "Name",
-                        ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
+                     "Id",
+                     "Directory",
+                     "LastReferenced",
+                     "Name",
+                     ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
                     FROM "FileEntryCaches" 
                     WHERE
-                        "Directory" = {TargetDirectory.FullName} 
+                     "Directory" = {TargetDirectory.FullName} AND
+                     "LastReferenced" = {timeStamp} 
                     ORDER BY
-                        "Name" ASC
+                     "Name" ASC
                     """)
                 where entity.Index == index
                 select entity).First();
-
-        // TODO
-        //int indexFrom = 0;
-        //int? indexRead = index;
-
-        //logger.LogTrace("Get item: {index}", index);
-
-        //if (readBuffer != null)
-        //{
-        //    indexFrom = readBuffer[0].Index;
-        //    int indexLast = indexFrom + readBuffer.Length;
-
-        //    // 
-        //    if ((indexFrom <= index) && (index < indexLast)) {
-        //        indexRead = null;
-        //    }
-        //}
-
-        //if (indexRead != null)
-        //{
-        //    using var context = dbContextFactory.CreateDbContext();
-
-        //    readBuffer = (from entity in context.Set<FileEntryIndex>()
-        //                  .FromSqlInterpolated($"""
-        //                    SELECT
-        //                     "Id",
-        //                     "Directory",
-        //                     "Name",
-        //                     ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
-        //                    FROM "FileEntryCaches" 
-        //                    WHERE
-        //                     "Directory" = {TargetDirectory.FullName} 
-        //                    ORDER BY
-        //                     "Name" ASC
-        //                    """)
-        //                  select entity)
-        //                 .Skip((int)indexRead)
-        //                 .Take(BUFFER_COUNT)
-        //                 .ToArray();
-
-        //    indexFrom = (int)indexRead;
-        //}
-
-        //return readBuffer![index - indexFrom];
     }
 
     public bool IsReadOnly => false;
@@ -200,7 +168,8 @@ public class FileCollection :
             using (var context = dbContextFactory.CreateDbContext())
             {
                 count = (from entity in context.FileEntryCaches
-                         where entity.Directory == TargetDirectory.FullName
+                         where (entity.Directory == TargetDirectory.FullName) && 
+                               (entity.LastReferenced == timeStamp)
                          select entity).Count();
             }
 
@@ -285,12 +254,19 @@ public class FileCollection :
     {
         using (var context = dbContextFactory.CreateDbContext())
         {
-            return context.FileEntryCaches.FromSqlInterpolated($"""
+            return context.Set<FileEntryIndex>().FromSqlInterpolated($"""
                 SELECT
                  "Id",
                  "Directory",
+                 "LastReferenced",
                  "Name",
-                FROM "FileEntryCaches"
+                 ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
+                FROM "FileEntryCaches" 
+                WHERE
+                 "Directory" = {TargetDirectory.FullName} AND
+                 "LastReferenced" = TIMESTAMP {timeStamp.ToString("o")} 
+                ORDER BY
+                 "Name" ASC
                 """).AsNoTracking().GetEnumerator();
         }
     }

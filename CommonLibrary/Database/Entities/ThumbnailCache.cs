@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
@@ -32,12 +32,12 @@ public class ThumbnailCache
     public ThumbnailCache(FileInfo file)
     {
         Path = file.FullName;
-        LastReferenced = DateTime.Now;
+        LastReferenced = DateTime.UtcNow;
     }
 
     public void UpdateReference()
     {
-        LastReferenced = DateTime.Now;
+        LastReferenced = DateTime.UtcNow;
     }
 
 }
