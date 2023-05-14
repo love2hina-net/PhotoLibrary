@@ -1,4 +1,7 @@
-﻿using love2hina.Windows.MAUI.PhotoViewer.Pages;
+using ImageMagick;
+using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
+using love2hina.Windows.MAUI.PhotoViewer.Pages;
+using Microsoft.EntityFrameworkCore;
 
 namespace love2hina.Windows.MAUI.PhotoViewer;
 
@@ -29,10 +32,18 @@ public partial class App : Application
     {
         base.OnStart();
 
-        var initPage = (InitialPage?)MainPage ?? throw new NullReferenceException();
         var initTask = Task.Run(() =>
         {
-            initPage.Initialize();
+            var dbContextFactory = services.GetRequiredService<IDbContextFactory<FirebirdContext>>();
+
+            MagickNET.Initialize();
+
+            // DBの初期化
+            using (var context = dbContextFactory.CreateDbContext())
+            {
+                // DBテーブルを構成する
+                context.Database.Migrate();
+            }
 
             MainThread.BeginInvokeOnMainThread(() =>
             {

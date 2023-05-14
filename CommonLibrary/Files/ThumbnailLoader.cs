@@ -1,11 +1,9 @@
-﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
+using ImageMagick;
+using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
 using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
 using love2hina.Windows.MAUI.PhotoViewer.Common.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Graphics.Skia;
-using SkiaSharp;
 
 namespace love2hina.Windows.MAUI.PhotoViewer.Common.Files;
 
@@ -56,30 +54,27 @@ public class ThumbnailLoader
     private ThumbnailCache? LoadBitmapData(FirebirdContext context, FileInfo file)
     {
         ThumbnailCache? cache = null;
-        IImage? image = null;
+        IMagickImage? image = null;
 
         using (var stream = file.OpenRead())
         {
-            image = SkiaImage.FromStream(stream);
+            image = new MagickImage(stream);
         }
 
         if (image != null)
         {
             // 縮小する
-            var rate = Math.Min(Math.Min(256.0f / image.Width, 256.0f / image.Height), 1.0f);
-            var size = new SizeF(image.Width * rate, image.Height * rate);
+            var size = new MagickGeometry(256, 256);
 
-            using (var thumbnail = new SkiaBitmapExportContext((int)size.Width, (int)size.Height, 1))
+            size.IgnoreAspectRatio = false;
+            image.Resize(size);
+
+            cache = new ThumbnailCache(file)
             {
-                thumbnail.Canvas.DrawImage(image, 0, 0, size.Width, size.Height);
-
-                cache = new ThumbnailCache(file)
-                {
-                    Width = (int)size.Width,
-                    Height = (int)size.Height,
-                    PngData = thumbnail.AsBytes(ImageFormat.Png)
-                };
-            }
+                Width = (int)size.Width,
+                Height = (int)size.Height,
+                PngData = image.AsWriteBytes(MagickFormat.Png)
+            };
 
             context.ThumbnailCaches.Add(cache);
             context.SaveChanges();
@@ -89,29 +84,15 @@ public class ThumbnailLoader
     }
 }
 
-internal static class SkiaBitmapExportContextExtensions
+internal static class MagickImageExtensions
 {
 
-    internal static byte[]? AsBytes(this SkiaBitmapExportContext target, ImageFormat format = ImageFormat.Png, float quality = 1.0f)
+    internal static byte[]? AsWriteBytes(this IMagickImage target, MagickFormat format = MagickFormat.Png)
     {
-        if (target == null) return null;
-
-        int skQuality = (int)(100.0f * quality);
-        SKEncodedImageFormat skFormat = format switch
-        {
-            ImageFormat.Png => SKEncodedImageFormat.Png,
-            ImageFormat.Jpeg => SKEncodedImageFormat.Jpeg,
-            ImageFormat.Bmp or ImageFormat.Gif or ImageFormat.Tiff => throw new PlatformNotSupportedException($"Skia does not support {format} format."),
-            _ => throw new ArgumentOutOfRangeException(nameof(format), format, null)
-        };
-
         using (var stream = new MemoryStream())
         {
-            using (var data = target.SKImage.Encode(skFormat, skQuality))
-            {
-                data.SaveTo(stream);
-                return stream.ToArray();
-            }
+            target.Write(stream, format);
+            return stream.ToArray();
         }
     }
 
