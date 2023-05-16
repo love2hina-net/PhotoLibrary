@@ -45,6 +45,7 @@ public partial class App : Application
                 context.Database.Migrate();
             }
 
+            // 初期化完了
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 MainPage = services.GetRequiredService<RootShell>();

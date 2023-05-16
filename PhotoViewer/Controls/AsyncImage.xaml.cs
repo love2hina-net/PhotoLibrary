@@ -1,4 +1,4 @@
-﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
+using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
 using love2hina.Windows.MAUI.PhotoViewer.Common.DependencyInjection;
 using love2hina.Windows.MAUI.PhotoViewer.Common.Files;
 
@@ -7,8 +7,6 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Controls;
 [DeclareService(ServiceLifetime.Transient)]
 public partial class AsyncImage : Grid
 {
-
-    public static readonly string[] EXT = { ".jpg", ".png" };
 
     protected readonly ThumbnailLoader thumbnailLoader;
 
@@ -33,18 +31,22 @@ public partial class AsyncImage : Grid
 
     protected void RefreshImage()
     {
-        if ((TargetFile?.Exists ?? false) && (EXT.Contains(TargetFile.Extension.ToLower())))
+        if (TargetFile != null)
         {
             var loadTask = thumbnailLoader.GetThumbnail(TargetFile)
                 .ContinueWith((t) =>
                 {
-                    ThumbnailCache cache = t.Result!;
-                    var image = ImageSource.FromStream(() => new MemoryStream(cache.PngData!));
+                    ThumbnailCache cache = t.Result;
 
-                    MainThread.BeginInvokeOnMainThread(() =>
+                    if (cache.PngData != null)
                     {
-                        thumbnail.Source = image;
-                    });
+                        var image = ImageSource.FromStream(() => new MemoryStream(cache.PngData));
+
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            thumbnail.Source = image;
+                        });
+                    }
                 }, TaskContinuationOptions.OnlyOnRanToCompletion);
         }
     }
