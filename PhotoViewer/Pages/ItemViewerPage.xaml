@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="love2hina.Windows.MAUI.PhotoViewer.Pages.ItemViewerPage"
              BindingContext="{Binding Source={RelativeSource Self}}"
-             Title="">
+             Title="{Binding TargetFile}">
     <Image
         x:Name="image"
         Source="{Binding TargetFile}" />

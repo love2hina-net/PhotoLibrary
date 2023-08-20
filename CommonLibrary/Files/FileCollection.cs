@@ -135,7 +135,7 @@ public class FileCollection :
 
         using var context = dbContextFactory.CreateDbContext();
         return (from entity in context.Set<FileEntryIndex>()
-                    .FromSqlInterpolated($"""
+                .FromSqlInterpolated($"""
                     SELECT
                      "Id",
                      "Directory",
@@ -198,17 +198,18 @@ public class FileCollection :
         using var context = dbContextFactory.CreateDbContext();
         return (from entity in context.Set<FileEntryCache>()
                 .FromSqlInterpolated($"""
-                    SELECT
-                        "Id",
-                        "Directory",
-                        "LastReferenced",
-                        "Name"
-                    FROM "FileEntryCaches"
-                    WHERE
-                        "Directory" = {TargetDirectory.FullName} AND
-                        "LastReferenced" = {timeStamp}
+                    SELECT 
+                     "Id",
+                     "Directory",
+                     "LastReferenced",
+                     "Name" 
+                    FROM "FileEntryCaches" 
+                    WHERE 
+                     "Directory" = {TargetDirectory.FullName} AND 
+                     "Directory" = {item.Directory} AND 
+                     "Name" = {item.Name} AND 
+                     "LastReferenced" = {timeStamp} 
                     """)
-                where entity.Directory == item.Directory && entity.Name == item.Name
                 select entity).Any();
     }
 
@@ -217,23 +218,38 @@ public class FileCollection :
     public int IndexOf(FileEntryCache item)
     {
         using var context = dbContextFactory.CreateDbContext();
+
+        // TODO: EFCore 7系になったら、スカラクエリに変更する
         return (from entity in context.Set<FileEntryIndex>()
                 .FromSqlInterpolated($"""
-                    SELECT
-                        "Id",
-                        "Directory",
-                        "LastReferenced",
-                        "Name",
-                        ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index"
-                    FROM "FileEntryCaches"
-                    WHERE
-                        "Directory" = {TargetDirectory.FullName} AND
-                        "LastReferenced" = {timeStamp}
-                    ORDER BY
-                        "Name" ASC
+                    SELECT 
+                     "FileEntryIndex"."Id",
+                     "FileEntryIndex"."Directory",
+                     "FileEntryIndex"."LastReferenced",
+                     "FileEntryIndex"."Name",
+                     "FileEntryIndex"."Index" 
+                    FROM (
+                     SELECT 
+                      "Id",
+                      "Directory",
+                      "LastReferenced",
+                      "Name",
+                      ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index" 
+                     FROM "FileEntryCaches" 
+                     WHERE 
+                      "Directory" = {TargetDirectory.FullName} AND 
+                      "LastReferenced" = {timeStamp} 
+                     ORDER BY 
+                      "Name" ASC 
+                     ) AS "FileEntryIndex" 
+                    WHERE 
+                     "FileEntryIndex"."Directory" = {item.Directory} AND 
+                     "FileEntryIndex"."Name" = {item.Name} 
+                    ORDER BY 
+                     "FileEntryIndex"."Index" ASC 
                     """)
-                where entity.Directory == item.Directory && entity.Name == item.Name
-                select entity.Index).FirstOrDefault(-1);
+                select entity)
+                .FirstOrDefault()?.Index ?? -1;
     }
 
     int System.Collections.IList.IndexOf(object? item) => IndexOf((FileEntryCache)item!);
@@ -296,7 +312,7 @@ public class FileCollection :
                 FROM "FileEntryCaches" 
                 WHERE
                  "Directory" = {TargetDirectory.FullName} AND
-                 "LastReferenced" = TIMESTAMP {timeStamp.ToString("o")} 
+                 "LastReferenced" = {timeStamp} 
                 ORDER BY
                  "Name" ASC
                 """).AsNoTracking().GetEnumerator();
