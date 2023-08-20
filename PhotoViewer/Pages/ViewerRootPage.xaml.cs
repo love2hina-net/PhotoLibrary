@@ -1,4 +1,4 @@
-﻿namespace love2hina.Windows.MAUI.PhotoViewer.Pages;
+namespace love2hina.Windows.MAUI.PhotoViewer.Pages;
 
 public partial class ViewerRootPage : ContentPage
 {
@@ -7,6 +7,7 @@ public partial class ViewerRootPage : ContentPage
         InitializeComponent();
 
         Routing.RegisterRoute("viewer/directory", typeof(DirectoryPage));
+        Routing.RegisterRoute("viewer/item", typeof(ItemViewerPage));
     }
 
     async void DirectoryView_Clicked(object sender, EventArgs args)

@@ -70,6 +70,9 @@
     <MauiXaml Update="Pages\DirectoryPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Pages\ItemViewerPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Pages\ViewerRootPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>

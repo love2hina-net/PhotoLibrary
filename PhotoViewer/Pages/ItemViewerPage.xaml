@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="love2hina.Windows.MAUI.PhotoViewer.Pages.ItemViewerPage"
+             BindingContext="{Binding Source={RelativeSource Self}}"
+             Title="">
+    <Image
+        x:Name="image"
+        Source="{Binding TargetFile}" />
+</ContentPage>

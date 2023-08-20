@@ -195,16 +195,45 @@ public class FileCollection :
 
     public bool Contains(FileEntryCache item)
     {
-        // TODO
-        throw new NotImplementedException();
+        using var context = dbContextFactory.CreateDbContext();
+        return (from entity in context.Set<FileEntryCache>()
+                .FromSqlInterpolated($"""
+                    SELECT
+                        "Id",
+                        "Directory",
+                        "LastReferenced",
+                        "Name"
+                    FROM "FileEntryCaches"
+                    WHERE
+                        "Directory" = {TargetDirectory.FullName} AND
+                        "LastReferenced" = {timeStamp}
+                    """)
+                where entity.Directory == item.Directory && entity.Name == item.Name
+                select entity).Any();
     }
 
     bool System.Collections.IList.Contains(object? item) => Contains((FileEntryCache)item!);
 
     public int IndexOf(FileEntryCache item)
     {
-        // TODO
-        throw new NotImplementedException();
+        using var context = dbContextFactory.CreateDbContext();
+        return (from entity in context.Set<FileEntryIndex>()
+                .FromSqlInterpolated($"""
+                    SELECT
+                        "Id",
+                        "Directory",
+                        "LastReferenced",
+                        "Name",
+                        ROW_NUMBER() OVER (ORDER BY "Name" ASC) - 1 AS "Index"
+                    FROM "FileEntryCaches"
+                    WHERE
+                        "Directory" = {TargetDirectory.FullName} AND
+                        "LastReferenced" = {timeStamp}
+                    ORDER BY
+                        "Name" ASC
+                    """)
+                where entity.Directory == item.Directory && entity.Name == item.Name
+                select entity.Index).FirstOrDefault(-1);
     }
 
     int System.Collections.IList.IndexOf(object? item) => IndexOf((FileEntryCache)item!);
