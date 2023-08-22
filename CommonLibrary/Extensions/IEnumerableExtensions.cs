@@ -1,4 +1,4 @@
-namespace love2hina.Windows.MAUI.PhotoViewer.Common.Extensions;
+namespace love2hina.Windows.MAUI.PhotoLibrary.Common.Extensions;
 
 public static class IEnumerableExtensions
 {

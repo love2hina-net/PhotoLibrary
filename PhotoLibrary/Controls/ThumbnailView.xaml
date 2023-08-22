@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<controls:CollectionViewEx xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                           xmlns:controls="clr-namespace:love2hina.Windows.MAUI.PhotoLibrary.Controls"
+                           x:Class="love2hina.Windows.MAUI.PhotoLibrary.Controls.ThumbnailView"
+                           BindingContext="{Binding Source={RelativeSource Self}}"
+                           ItemsSource="{Binding Thumbnails}"
+                           SelectionMode="Single"
+                           Tapped="ThumbnailView_Tapped">
+
+    <CollectionView.ItemsLayout>
+        <LinearItemsLayout Orientation="Vertical" />
+    </CollectionView.ItemsLayout>
+    <CollectionView.ItemTemplate>
+        <DataTemplate>
+            <Grid HeightRequest="100">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <controls:AsyncImage
+                    x:FactoryMethod="Create"
+                    Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                    TargetFile="{Binding Path}" />
+                <Label Grid.Column="1" Grid.Row="0"
+                       Text="{Binding Name}" />
+            </Grid>
+        </DataTemplate>
+    </CollectionView.ItemTemplate>
+</controls:CollectionViewEx>

@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Design;
 using System.Runtime.InteropServices;
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database;
+namespace love2hina.Windows.MAUI.PhotoLibrary.Common.Database;
 
 public interface IDatabaseConfig
 {

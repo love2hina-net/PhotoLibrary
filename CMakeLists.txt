@@ -1,9 +1,9 @@
-﻿# CMakeList.txt : 最上位の CMake プロジェクト ファイル。グローバル構成を行います
+# CMakeList.txt : 最上位の CMake プロジェクト ファイル。グローバル構成を行います
 # また、サブプロジェクトをここに含めます。
 #
 cmake_minimum_required(VERSION 3.24)
 
-project("PhotoViewer")
+project("PhotoLibrary")
 
 # サブプロジェクトを含めます。
 add_subdirectory("firebird")
@@ -16,8 +16,8 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     set(PLATFORM "x86")
 endif()
 
-add_custom_target(PhotoViewer ALL
-    COMMAND dotnet build PhotoViewer.sln -p:Platform=${PLATFORM} --configuration ${CMAKE_BUILD_TYPE}
+add_custom_target(PhotoLibrary ALL
+    COMMAND dotnet build PhotoLibrary.sln -p:Platform=${PLATFORM} --configuration ${CMAKE_BUILD_TYPE}
     DEPENDS
         "${CMAKE_BINARY_DIR}/firebird/exec/main/intl/fbintl.conf"
         "${CMAKE_BINARY_DIR}/firebird/exec/main/intl/fbintl.dll"

@@ -1,8 +1,8 @@
-﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
-using love2hina.Windows.MAUI.PhotoViewer.Common.Files;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.Database;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.Files;
 using Microsoft.EntityFrameworkCore;
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Test.Files;
+namespace love2hina.Windows.MAUI.PhotoLibrary.Test.Files;
 
 public class ThumbnailLoaderTest : Startup
 {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
+namespace love2hina.Windows.MAUI.PhotoLibrary.Common.Migrations
 {
     public partial class v0001 : Migration
     {

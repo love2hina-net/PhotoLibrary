@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
+namespace love2hina.Windows.MAUI.PhotoLibrary.Common.Database.Entities;
 
 [Index(nameof(Path), Name = @"IDX_ThumbnailCache_Path")]
 [Index(nameof(LastReferenced), Name = @"IDX_ThumbnailCache_Date")]

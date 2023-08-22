@@ -1,14 +1,14 @@
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Security;
-using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
-using love2hina.Windows.MAUI.PhotoViewer.Common.DependencyInjection;
-using love2hina.Windows.MAUI.PhotoViewer.Common.Extensions;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.Database;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.DependencyInjection;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Common.Files;
+namespace love2hina.Windows.MAUI.PhotoLibrary.Common.Files;
 
 public class DirectoryCollection : ObservableCollection<DirectoryInfo>
 {

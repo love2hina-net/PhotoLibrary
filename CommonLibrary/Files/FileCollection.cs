@@ -1,12 +1,12 @@
-using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
-using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
-using love2hina.Windows.MAUI.PhotoViewer.Common.Extensions;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.Database;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.Database.Entities;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Common.Files;
+namespace love2hina.Windows.MAUI.PhotoLibrary.Common.Files;
 
 public class FileCollection :
     ICollection<FileEntryCache>, IReadOnlyCollection<FileEntryCache>,

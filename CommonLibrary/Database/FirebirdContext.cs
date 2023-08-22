@@ -1,10 +1,10 @@
 using FirebirdSql.Data.FirebirdClient;
-using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database;
+namespace love2hina.Windows.MAUI.PhotoLibrary.Common.Database;
 
 public class FirebirdContext : DbContext
 {

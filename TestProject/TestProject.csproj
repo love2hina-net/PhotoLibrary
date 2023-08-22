@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Platforms>x64;x86</Platforms>
     <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>love2hina.Windows.MAUI.PhotoViewer.Test</RootNamespace>
+    <RootNamespace>love2hina.Windows.MAUI.PhotoLibrary.Test</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>

@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
+namespace love2hina.Windows.MAUI.PhotoLibrary.Common.Database.Entities;
 
 [Keyless]
 public class FileEntryIndex : FileEntryCache

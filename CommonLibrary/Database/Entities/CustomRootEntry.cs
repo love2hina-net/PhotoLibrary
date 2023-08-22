@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
+namespace love2hina.Windows.MAUI.PhotoLibrary.Common.Database.Entities;
 
 public class CustomRootEntry
 {

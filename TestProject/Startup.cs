@@ -1,8 +1,8 @@
-﻿using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
-using love2hina.Windows.MAUI.PhotoViewer.Common.DependencyInjection;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.Database;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Test;
+namespace love2hina.Windows.MAUI.PhotoLibrary.Test;
 
 public class Startup
 {

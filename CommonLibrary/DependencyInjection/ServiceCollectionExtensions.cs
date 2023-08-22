@@ -1,6 +1,6 @@
-﻿using System.Reflection;
+using System.Reflection;
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Common.DependencyInjection;
+namespace love2hina.Windows.MAUI.PhotoLibrary.Common.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {

@@ -4,11 +4,11 @@ using FirebirdSql.EntityFrameworkCore.Firebird.Metadata;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.Database;
 
 #nullable disable
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
+namespace love2hina.Windows.MAUI.PhotoLibrary.Common.Migrations
 {
     [DbContext(typeof(FirebirdContext))]
     partial class FirebirdContextModelSnapshot : ModelSnapshot
@@ -21,7 +21,7 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                 .HasAnnotation("ProductVersion", "6.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 31);
 
-            modelBuilder.Entity("love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities.CustomRootEntry", b =>
+            modelBuilder.Entity("love2hina.Windows.MAUI.PhotoLibrary.Common.Database.Entities.CustomRootEntry", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,7 +43,7 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                     b.ToTable("CustomRootEntries");
                 });
 
-            modelBuilder.Entity("love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities.FileEntryCache", b =>
+            modelBuilder.Entity("love2hina.Windows.MAUI.PhotoLibrary.Common.Database.Entities.FileEntryCache", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,7 +70,7 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                     b.ToTable("FileEntryCaches");
                 });
 
-            modelBuilder.Entity("love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities.FileEntryIndex", b =>
+            modelBuilder.Entity("love2hina.Windows.MAUI.PhotoLibrary.Common.Database.Entities.FileEntryIndex", b =>
                 {
                     b.Property<string>("Directory")
                         .IsRequired()
@@ -96,7 +96,7 @@ namespace love2hina.Windows.MAUI.PhotoViewer.Common.Migrations
                     b.ToSqlQuery("SELECT\r\n \"Id\",\r\n \"Directory\",\r\n \"LastReferenced\",\r\n \"Name\",\r\n ROW_NUMBER() OVER (ORDER BY \"Name\" ASC) - 1 AS \"Index\" \r\nFROM \"FileEntryCaches\" \r\nORDER BY\r\n \"Name\" ASC");
                 });
 
-            modelBuilder.Entity("love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities.ThumbnailCache", b =>
+            modelBuilder.Entity("love2hina.Windows.MAUI.PhotoLibrary.Common.Database.Entities.ThumbnailCache", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

@@ -1,12 +1,12 @@
 using ImageMagick;
-using love2hina.Windows.MAUI.PhotoViewer.Common.Database;
-using love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
-using love2hina.Windows.MAUI.PhotoViewer.Common.DependencyInjection;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.Database;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.Database.Entities;
+using love2hina.Windows.MAUI.PhotoLibrary.Common.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Common.Files;
+namespace love2hina.Windows.MAUI.PhotoLibrary.Common.Files;
 
 [DeclareService(ServiceLifetime.Singleton)]
 public class ThumbnailLoader

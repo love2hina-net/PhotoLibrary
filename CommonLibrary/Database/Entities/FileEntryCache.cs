@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace love2hina.Windows.MAUI.PhotoViewer.Common.Database.Entities;
+namespace love2hina.Windows.MAUI.PhotoLibrary.Common.Database.Entities;
 
 [Index(nameof(Directory), nameof(LastReferenced), nameof(Name), Name = @"IDX_FileEntryCache_Path")]
 public class FileEntryCache

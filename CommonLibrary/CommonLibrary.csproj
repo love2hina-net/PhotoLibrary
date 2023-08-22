@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Platforms>x64;x86</Platforms>
     <TargetFrameworks>net7.0</TargetFrameworks>
-    <RootNamespace>love2hina.Windows.MAUI.PhotoViewer.Common</RootNamespace>
+    <RootNamespace>love2hina.Windows.MAUI.PhotoLibrary.Common</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
