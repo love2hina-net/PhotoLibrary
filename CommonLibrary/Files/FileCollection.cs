@@ -121,7 +121,9 @@ public class FileCollection :
 
                     // 変更を通知
                     logger.LogDebug("Notify changed: {index}", indexedEntities[0].Index);
-                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, indexedEntities, indexedEntities[0].Index));
+                    // TODO: CollectionViewのバグ？(逆順で登録される)
+                    // CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, indexedEntities, indexedEntities[0].Index));
+                    indexedEntities.ForEach(e => CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, e, e.Index)));
                 }
             }
 
