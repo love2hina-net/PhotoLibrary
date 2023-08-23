@@ -11,14 +11,26 @@
             AbsoluteLayout.LayoutBounds="0,0,1,1"
             Source="{Binding TargetFile.FullName}" />
         <Button
+            x:Name="back"
             AbsoluteLayout.LayoutFlags="All"
             AbsoluteLayout.LayoutBounds="0,0,0.05,1"
             Text="&lt;"
-            Clicked="BackButton_Clicked" />
+            IsEnabled="{Binding IsBackEnabled}"
+            Clicked="BackButton_Clicked">
+            <Button.GestureRecognizers>
+                <PointerGestureRecognizer PointerEntered="Button_PointerEntered" PointerExited="Button_PointerExited" />
+            </Button.GestureRecognizers>
+        </Button>
         <Button
+            x:Name="forward"
             AbsoluteLayout.LayoutFlags="All"
             AbsoluteLayout.LayoutBounds="1,0,0.05,1"
             Text="&gt;"
-            Clicked="NextButton_Clicked" />
+            IsEnabled="{Binding IsForwardEnabled}"
+            Clicked="ForwardButton_Clicked">
+            <Button.GestureRecognizers>
+                <PointerGestureRecognizer PointerEntered="Button_PointerEntered" PointerExited="Button_PointerExited" />
+            </Button.GestureRecognizers>
+        </Button>
     </AbsoluteLayout>
 </ContentPage>
