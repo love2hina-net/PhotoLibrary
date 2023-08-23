@@ -4,7 +4,21 @@
              x:Class="love2hina.Windows.MAUI.PhotoLibrary.Pages.ItemViewerPage"
              BindingContext="{Binding Source={RelativeSource Self}}"
              Title="{Binding TargetFile.Name}">
-    <Image
-        x:Name="image"
-        Source="{Binding TargetFile.FullName}" />
+    <AbsoluteLayout>
+        <Image
+            x:Name="image"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            Source="{Binding TargetFile.FullName}" />
+        <Button
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0,0,0.05,1"
+            Text="&lt;"
+            Clicked="BackButton_Clicked" />
+        <Button
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="1,0,0.05,1"
+            Text="&gt;"
+            Clicked="NextButton_Clicked" />
+    </AbsoluteLayout>
 </ContentPage>
