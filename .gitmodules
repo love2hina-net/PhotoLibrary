@@ -1,3 +1,6 @@
 [submodule "firebird"]
 	path = firebird
 	url = https://github.com/love2hina-net/firebird.git
+[submodule "NETProvider"]
+	path = NETProvider
+	url = https://github.com/FirebirdSQL/NETProvider.git
