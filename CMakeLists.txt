@@ -16,20 +16,39 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     set(PLATFORM "x86")
 endif()
 
-add_custom_target(PhotoLibrary ALL
-    COMMAND dotnet build PhotoLibrary.sln -p:Platform=${PLATFORM} --configuration ${CMAKE_BUILD_TYPE}
-    DEPENDS
-        "${CMAKE_BINARY_DIR}/firebird/exec/main/intl/fbintl.conf"
-        "${CMAKE_BINARY_DIR}/firebird/exec/main/intl/fbintl.dll"
-        "${CMAKE_BINARY_DIR}/firebird/exec/main/plugins/engine13.dll"
-        "${CMAKE_BINARY_DIR}/firebird/exec/main/firebird.conf"
-        "${CMAKE_BINARY_DIR}/firebird/exec/main/firebird.msg"
-        "${CMAKE_BINARY_DIR}/firebird/exec/main/fbclient.dll"
-        "${CMAKE_BINARY_DIR}/firebird/exec/main/ib_util.dll"
-        "${CMAKE_BINARY_DIR}/firebird/exec/main/icudt63l.dat"
-        "${CMAKE_BINARY_DIR}/firebird/exec/main/icudt63.dll"
-        "${CMAKE_BINARY_DIR}/firebird/exec/main/icuin63.dll"
-        "${CMAKE_BINARY_DIR}/firebird/exec/main/icuuc63.dll"
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    VERBATIM
-)
+if(WIN32)
+    add_custom_target(PhotoLibrary ALL
+        COMMAND dotnet build PhotoLibrary.sln -p:Platform=${PLATFORM} --configuration ${CMAKE_BUILD_TYPE}
+        DEPENDS
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/intl/fbintl.conf"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/intl/fbintl.dll"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/plugins/engine13.dll"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/firebird.conf"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/firebird.msg"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/fbclient.dll"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/ib_util.dll"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/icudt63l.dat"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/icudt63.dll"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/icuin63.dll"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/icuuc63.dll"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        VERBATIM
+    )
+else()
+    add_custom_target(PhotoLibrary ALL
+        COMMAND dotnet build PhotoLibrary.sln -p:Platform=${PLATFORM} --configuration ${CMAKE_BUILD_TYPE}
+        DEPENDS
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/intl/fbintl.conf"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/intl/${CMAKE_SHARED_LIBRARY_PREFIX}fbintl${CMAKE_SHARED_LIBRARY_SUFFIX}"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}engine13${CMAKE_SHARED_LIBRARY_SUFFIX}"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/firebird.conf"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/firebird.msg"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/lib/${CMAKE_SHARED_LIBRARY_PREFIX}fbclient${CMAKE_SHARED_LIBRARY_SUFFIX}"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/lib/${CMAKE_SHARED_LIBRARY_PREFIX}ib_util${CMAKE_SHARED_LIBRARY_SUFFIX}"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/lib/${CMAKE_SHARED_LIBRARY_PREFIX}icudata.73.2${CMAKE_SHARED_LIBRARY_SUFFIX}"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/lib/${CMAKE_SHARED_LIBRARY_PREFIX}icui18n.73.2${CMAKE_SHARED_LIBRARY_SUFFIX}"
+            "${CMAKE_BINARY_DIR}/firebird/exec/main/lib/${CMAKE_SHARED_LIBRARY_PREFIX}icuuc.73.2${CMAKE_SHARED_LIBRARY_SUFFIX}"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        VERBATIM
+    )
+endif()
