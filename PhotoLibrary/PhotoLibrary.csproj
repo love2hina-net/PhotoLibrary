@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Platforms>x64;x86</Platforms>
+    <Platforms>x64;x86;arm64</Platforms>
     <TargetFrameworks>net8.0-maccatalyst</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net8.0-windows10.0.19041.0;$(TargetFrameworks)</TargetFrameworks>
     <OutputType>Exe</OutputType>
@@ -28,6 +28,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
     <CreatePackage>false</CreatePackage>
   </PropertyGroup>
+  <Import Project="../firebird.targets" />
   <ItemGroup>
     <!-- App Icon -->
     <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
@@ -88,5 +89,12 @@
     <MauiXaml Update="Views\AboutPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="@(Firebird)" KeepMetadata="Link">
+      <PublishFolderType>Assembly</PublishFolderType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </None>
   </ItemGroup>
 </Project>

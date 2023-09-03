@@ -1,16 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Platforms>x64;x86</Platforms>
+    <Platforms>x64;x86;arm64</Platforms>
     <TargetFrameworks>net8.0</TargetFrameworks>
     <RootNamespace>love2hina.Windows.MAUI.PhotoLibrary.Common</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-
-    <!-- for ef core migrations -->
-    <Platform Condition="'$(Platform)' != 'x64' And '$(Platform)' != 'x86'">x64</Platform>
-    <SolutionDir Condition="'$(SolutionDir)' == ''">$(MSBuildThisFileDirectory)\..</SolutionDir>
-    <FBPath>$(SolutionDir)\bin\build\win-$(Platform)-$(Configuration)\firebird\exec\main</FBPath>
   </PropertyGroup>
+  <Import Project="../firebird.targets" />
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.8" />
@@ -25,33 +21,13 @@
     <PackageReference Include="NLog.Extensions.Logging" Version="5.3.12" />
   </ItemGroup>
   <ItemGroup>
-    <Firebird Include="$(FBPath)\intl\fbintl.conf">
-      <Link>intl\%(FileName)%(Extension)</Link>
-    </Firebird>
-    <Firebird Include="$(FBPath)\intl\fbintl.dll">
-      <Link>intl\%(FileName)%(Extension)</Link>
-    </Firebird>
-    <Firebird Include="$(FBPath)\plugins\engine13.dll">
-      <Link>plugins\%(FileName)%(Extension)</Link>
-    </Firebird>
-    <Firebird Include="$(FBPath)\firebird.conf" />
-    <Firebird Include="$(FBPath)\firebird.msg" />
-    <Firebird Include="$(FBPath)\fbclient.dll" />
-    <Firebird Include="$(FBPath)\ib_util.dll" />
-    <Firebird Include="$(FBPath)\icudt63l.dat" />
-    <Firebird Include="$(FBPath)\icudt63.dll" />
-    <Firebird Include="$(FBPath)\icuin63.dll" />
-    <Firebird Include="$(FBPath)\icuuc63.dll" />
-<!--
-    <Firebird Include="$(FBPath)\msvcp140.dll" />
-    <Firebird Include="$(FBPath)\vcruntime140.dll" />
--->
-
-    <Content Include="@(Firebird)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="nlog.config">
+    <EmbeddedResource Include="@(Firebird)">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+      <CopyToPublishDirectory>None</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>None</CopyToPublishDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

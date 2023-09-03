@@ -6,9 +6,17 @@ Firebird Embdedd Serverをキャッシュとして利用します。
 This project was released under the MIT License.
 
 ### Build
+Windows:
 ```pwsh
-cmake --build
+cmake --build .
 ```
+
+macOS:
+```zsh
+brew install icu4c flock
+cmake --build .
+```
+firebird-codesign コード署名証明書が必要
 
 ### efcore migrations
 ```pwsh

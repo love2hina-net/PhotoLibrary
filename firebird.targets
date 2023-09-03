@@ -1,0 +1,60 @@
+<Project>
+  <PropertyGroup>
+    <!-- for ef core migrations -->
+    <Platform Condition="'$(Platform)' != 'arm64' And '$(Platform)' != 'x64' And '$(Platform)' != 'x86'">x64</Platform>
+    <SolutionDir Condition="'$(SolutionDir)' == ''">$(MSBuildThisFileDirectory)</SolutionDir>
+    <FBPath Condition="$([MSBuild]::IsOSPlatform('windows'))">$(SolutionDir)\bin\build\win-$(Platform)-$(Configuration)\firebird\exec\main</FBPath>
+    <FBPath Condition="$([MSBuild]::IsOSPlatform('osx'))">$(SolutionDir)\bin\build\mac-$(Platform)-$(Configuration)\firebird\exec\main</FBPath>
+  </PropertyGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('windows'))">
+    <Firebird Include="$(FBPath)\intl\fbintl.conf">
+      <Link>intl\%(FileName)%(Extension)</Link>
+    </Firebird>
+    <Firebird Include="$(FBPath)\intl\fbintl.dll">
+      <Link>intl\%(FileName)%(Extension)</Link>
+    </Firebird>
+    <Firebird Include="$(FBPath)\plugins\engine13.dll">
+      <Link>plugins\%(FileName)%(Extension)</Link>
+    </Firebird>
+    <Firebird Include="$(FBPath)\firebird.conf" />
+    <Firebird Include="$(FBPath)\firebird.msg" />
+    <Firebird Include="$(FBPath)\fbclient.dll" />
+    <Firebird Include="$(FBPath)\ib_util.dll" />
+    <Firebird Include="$(FBPath)\icudt63l.dat" />
+    <Firebird Include="$(FBPath)\icudt63.dll" />
+    <Firebird Include="$(FBPath)\icuin63.dll" />
+    <Firebird Include="$(FBPath)\icuuc63.dll" />
+<!--
+    <Firebird Include="$(FBPath)\msvcp140.dll" />
+    <Firebird Include="$(FBPath)\vcruntime140.dll" />
+-->
+  </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('osx'))">
+    <Firebird Include="$(FBPath)\intl\fbintl.conf">
+      <Link>intl\%(FileName)%(Extension)</Link>
+    </Firebird>
+    <Firebird Include="$(FBPath)\intl\libfbintl.dylib">
+      <Link>intl\%(FileName)%(Extension)</Link>
+    </Firebird>
+    <Firebird Include="$(FBPath)\plugins\libengine13.dylib">
+      <Link>plugins\%(FileName)%(Extension)</Link>
+    </Firebird>
+    <Firebird Include="$(FBPath)\firebird.conf" />
+    <Firebird Include="$(FBPath)\firebird.msg" />
+    <Firebird Include="$(FBPath)\lib\libfbclient.dylib">
+      <Link>lib\%(FileName)%(Extension)</Link>
+    </Firebird>
+    <Firebird Include="$(FBPath)\lib\libib_util.dylib">
+      <Link>lib\%(FileName)%(Extension)</Link>
+    </Firebird>
+    <Firebird Include="$(FBPath)\lib\libicudata.74.2.dylib">
+      <Link>lib\%(FileName)%(Extension)</Link>
+    </Firebird>
+    <Firebird Include="$(FBPath)\lib\libicui18n.74.2.dylib">
+      <Link>lib\%(FileName)%(Extension)</Link>
+    </Firebird>
+    <Firebird Include="$(FBPath)\lib\libicuuc.74.2.dylib">
+      <Link>lib\%(FileName)%(Extension)</Link>
+    </Firebird>
+  </ItemGroup>
+</Project>

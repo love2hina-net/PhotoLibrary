@@ -36,7 +36,7 @@ public partial class App : Application
         {
             var dbContextFactory = services.GetRequiredService<IDbContextFactory<FirebirdContext>>();
 
-            MagickNET.Initialize();
+            //MagickNET.Initialize();
 
             // DBの初期化
             using (var context = dbContextFactory.CreateDbContext())

@@ -1,0 +1,28 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET MAUI",
+            "type": "maui",
+            "request": "launch",
+            "preLaunchTask": "maui: Build"
+        },
+        {
+            "name": ".NET MAUI Native",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/PhotoLibrary/bin/Debug/net7.0-maccatalyst/maccatalyst-x64/PhotoLibrary.app",
+            "preLaunchTask": "maui: Build"
+        },
+        {
+            "name": "boot isql",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/build/mac-x64-debug/firebird/exec/boot/bin/isql",
+            "cwd": "${workspaceFolder}/bin/build/mac-x64-debug/firebird/exec/boot/bin"
+        }
+    ]
+}
