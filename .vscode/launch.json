@@ -9,6 +9,13 @@
             "type": "maui",
             "request": "launch",
             "preLaunchTask": "maui: Build"
+        },
+        {
+            "name": ".NET MAUI Native",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/PhotoLibrary/bin/Debug/net7.0-maccatalyst/maccatalyst-x64/PhotoLibrary.app",
+            "preLaunchTask": "maui: Build"
         }
     ]
 }

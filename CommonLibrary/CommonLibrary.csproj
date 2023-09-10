@@ -68,11 +68,11 @@
     <Firebird Include="$(FBPath)\lib\libicuuc.73.2.dylib" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="@(Firebird)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="nlog.config">
+    <EmbeddedResource Include="@(Firebird)">
+    </EmbeddedResource>
+    <EmbeddedResource Include="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
