@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Platforms>x64;x86</Platforms>
-    <TargetFrameworks>net7.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <RootNamespace>love2hina.Windows.MAUI.PhotoLibrary.Common</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -19,9 +19,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="FirebirdSql.EntityFrameworkCore.Firebird" Version="9.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="13.2.0" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="13.10.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.12" />
   </ItemGroup>
   <ItemGroup>
     <Firebird Include="$(FBPath)\intl\fbintl.conf">

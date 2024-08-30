@@ -20,7 +20,7 @@ public class ThumbnailLoaderTest : Startup
     }
 
     [Fact]
-    public async void Test()
+    public async Task Test()
     {
         using (var context = DbContextFactory.CreateDbContext())
         {

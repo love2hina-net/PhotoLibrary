@@ -4,6 +4,7 @@
     <IsFirstTimeProjectOpen>False</IsFirstTimeProjectOpen>
     <ActiveDebugFramework>net7.0-windows10.0.19041.0</ActiveDebugFramework>
     <ActiveDebugProfile>Windows Machine</ActiveDebugProfile>
+    <SplashScreenSource>Z:\Repositories\PhotoLibrary\PhotoLibrary\Resources\Splash\splash.png</SplashScreenSource>
   </PropertyGroup>
   <ItemGroup>
     <AppxManifest Update="Platforms\Windows\Package.appxmanifest">
