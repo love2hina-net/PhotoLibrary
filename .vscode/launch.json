@@ -8,7 +8,8 @@
             "name": ".NET MAUI",
             "type": "maui",
             "request": "launch",
-            "preLaunchTask": "maui: Build"
+            "preLaunchTask": "maui: Build",
+            "program": "${workspaceFolder}/PhotoLibrary/bin/x64/Debug/net8.0-windows10.0.19041.0/win10-x64/PhotoLibrary.exe",
         },
         {
             "name": ".NET MAUI Native",
@@ -16,13 +17,6 @@
             "request": "launch",
             "program": "${workspaceFolder}/PhotoLibrary/bin/Debug/net7.0-maccatalyst/maccatalyst-x64/PhotoLibrary.app",
             "preLaunchTask": "maui: Build"
-        },
-        {
-            "name": "boot isql",
-            "type": "lldb",
-            "request": "launch",
-            "program": "${workspaceFolder}/bin/build/mac-x64-debug/firebird/exec/boot/bin/isql",
-            "cwd": "${workspaceFolder}/bin/build/mac-x64-debug/firebird/exec/boot/bin"
         }
     ]
 }
