@@ -1,0 +1,5 @@
+{
+    // NOTE: XamarinがXcode 16に対応していないため、Xcode 15を使用し、かつホットリロードを無効にする
+    // https://github.com/xamarin/xamarin-macios/issues/20802
+    "dotnet.debug.hotReloadXAML": false
+}

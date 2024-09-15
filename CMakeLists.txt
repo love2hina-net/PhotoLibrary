@@ -29,9 +29,11 @@ else()
 endif()
 
 if(WIN32)
-    add_custom_target(
+    add_custom_command(
         OUTPUT "${CURRENT_BINARY_DIR}"
-        COMMAND mklink /d "${CURRENT_BINARY_DIR}" "${CMAKE_BINARY_DIR}"
+        COMMAND
+            cd "$<PATH:GET_PARENT_PATH,${CURRENT_BINARY_DIR}>" && 
+            mklink /d "$<PATH:GET_FILENAME,${CURRENT_BINARY_DIR}>" "$<SHELL_PATH:${CMAKE_BINARY_DIR}>"
         VERBATIM
     )
     add_custom_target(PhotoLibrary ALL
@@ -53,9 +55,11 @@ if(WIN32)
         VERBATIM
     )
 else()
-    add_custom_target(
+    add_custom_command(
         OUTPUT "${CURRENT_BINARY_DIR}"
-        COMMAND ln -s "${CMAKE_BINARY_DIR}" "${CURRENT_BINARY_DIR}"
+        COMMAND
+            cd "$<PATH:GET_PARENT_PATH,${CURRENT_BINARY_DIR}>" && 
+            ln -s "${CMAKE_BINARY_DIR}" "$<PATH:GET_FILENAME,${CURRENT_BINARY_DIR}>"
         VERBATIM
     )
     add_custom_target(PhotoLibrary ALL

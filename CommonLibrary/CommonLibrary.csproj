@@ -27,7 +27,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>None</CopyToPublishDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

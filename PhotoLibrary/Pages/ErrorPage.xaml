@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="love2hina.Windows.MAUI.PhotoLibrary.Pages.ErrorPage"
+             BindingContext="{Binding Source={RelativeSource Self}}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label
+            Grid.Row="0"
+            Margin="10"
+            Text="{Binding ExceptionTitle}" />
+        <Editor
+            x:Name="editor"
+            Grid.Row="1"
+            Margin="10"
+            MinimumHeightRequest="250"
+            IsReadOnly="True"
+            Text="{Binding ExceptionMessage}" />
+    </Grid>
+</ContentPage>

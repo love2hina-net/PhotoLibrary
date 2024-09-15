@@ -1,6 +1,7 @@
 using FirebirdSql.Data.FirebirdClient;
 using love2hina.Windows.MAUI.PhotoLibrary.Common.Database.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
@@ -8,8 +9,11 @@ namespace love2hina.Windows.MAUI.PhotoLibrary.Common.Database;
 
 public class FirebirdContext : DbContext
 {
+    private readonly IServiceProvider? services;
 
     private readonly ILoggerFactory? loggerFactory;
+
+    private readonly AssemblyResolver? resolver;
 
     private readonly FileInfo databaseFile;
 
@@ -19,10 +23,12 @@ public class FirebirdContext : DbContext
 
     public DbSet<FileEntryCache> FileEntryCaches { get; set; }
 
-    public FirebirdContext(IDatabaseConfig config, ILoggerFactory? loggerFactory)
+    public FirebirdContext(IDatabaseConfig config, IServiceProvider? services)
     {
         this.databaseFile = config.DatabaseFile;
-        this.loggerFactory = loggerFactory;
+        this.services = services;
+        this.loggerFactory = this.services?.GetService<ILoggerFactory>();
+        this.resolver = this.services?.GetService<AssemblyResolver>();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
