@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Platforms>x64;x86;arm64</Platforms>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>love2hina.Windows.MAUI.PhotoLibrary.Test</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>

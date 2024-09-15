@@ -1,10 +1,9 @@
 <Project>
   <PropertyGroup>
     <!-- for ef core migrations -->
-    <Platform Condition="'$(Platform)' != 'arm64' And '$(Platform)' != 'x64' And '$(Platform)' != 'x86'">x64</Platform>
     <SolutionDir Condition="'$(SolutionDir)' == ''">$(MSBuildThisFileDirectory)</SolutionDir>
-    <FBPath Condition="$([MSBuild]::IsOSPlatform('windows'))">$(SolutionDir)\bin\build\win-$(Platform)-$(Configuration)\firebird\exec\main</FBPath>
-    <FBPath Condition="$([MSBuild]::IsOSPlatform('osx'))">$(SolutionDir)\bin\build\mac-$(Platform)-$(Configuration)\firebird\exec\main</FBPath>
+    <FBPath Condition="$([MSBuild]::IsOSPlatform('windows'))">$(SolutionDir)\bin\build\win-current-$(Configuration)\firebird\exec\main</FBPath>
+    <FBPath Condition="$([MSBuild]::IsOSPlatform('osx'))">$(SolutionDir)\bin\build\mac-current-$(Configuration)\firebird\exec\main</FBPath>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('windows'))">
     <Firebird Include="$(FBPath)\intl\fbintl.conf">

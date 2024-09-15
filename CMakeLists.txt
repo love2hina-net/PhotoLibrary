@@ -19,10 +19,25 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     set(PLATFORM "x86")
 endif()
 
+# 共通出力パスの設定
 if(WIN32)
+    cmake_path(SET CURRENT_BINARY_DIR NORMALIZE "${CMAKE_BINARY_DIR}/../win-current-$<LOWER_CASE:${CMAKE_BUILD_TYPE}>")
+elseif(APPLE)
+    cmake_path(SET CURRENT_BINARY_DIR NORMALIZE "${CMAKE_BINARY_DIR}/../mac-current-$<LOWER_CASE:${CMAKE_BUILD_TYPE}>")
+else()
+    message(FATAL_ERROR "Unsupported platform")
+endif()
+
+if(WIN32)
+    add_custom_target(
+        OUTPUT "${CURRENT_BINARY_DIR}"
+        COMMAND mklink /d "${CURRENT_BINARY_DIR}" "${CMAKE_BINARY_DIR}"
+        VERBATIM
+    )
     add_custom_target(PhotoLibrary ALL
         COMMAND dotnet build PhotoLibrary.sln -p:Platform=${PLATFORM} --configuration ${CMAKE_BUILD_TYPE}
         DEPENDS
+            "${CURRENT_BINARY_DIR}"
             "${CMAKE_BINARY_DIR}/firebird/exec/main/intl/fbintl.conf"
             "${CMAKE_BINARY_DIR}/firebird/exec/main/intl/fbintl.dll"
             "${CMAKE_BINARY_DIR}/firebird/exec/main/plugins/engine13.dll"
@@ -38,9 +53,15 @@ if(WIN32)
         VERBATIM
     )
 else()
+    add_custom_target(
+        OUTPUT "${CURRENT_BINARY_DIR}"
+        COMMAND ln -s "${CMAKE_BINARY_DIR}" "${CURRENT_BINARY_DIR}"
+        VERBATIM
+    )
     add_custom_target(PhotoLibrary ALL
         COMMAND dotnet build PhotoLibrary.sln -p:Platform=${PLATFORM} --configuration ${CMAKE_BUILD_TYPE}
         DEPENDS
+            "${CURRENT_BINARY_DIR}"
             "${CMAKE_BINARY_DIR}/firebird/exec/main/intl/fbintl.conf"
             "${CMAKE_BINARY_DIR}/firebird/exec/main/intl/${CMAKE_SHARED_LIBRARY_PREFIX}fbintl${CMAKE_SHARED_LIBRARY_SUFFIX}"
             "${CMAKE_BINARY_DIR}/firebird/exec/main/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}engine13${CMAKE_SHARED_LIBRARY_SUFFIX}"
