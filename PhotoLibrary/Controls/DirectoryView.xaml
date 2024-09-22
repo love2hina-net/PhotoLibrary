@@ -6,7 +6,7 @@
                            BindingContext="{Binding Source={RelativeSource Self}}"
                            ItemsSource="{Binding Directories}"
                            SelectionMode="Single"
-                           Tapped="DirectoryView_Tapped">
+                           Selected="DirectoryView_Selected">
 
     <CollectionView.ItemsLayout>
         <LinearItemsLayout Orientation="Vertical" />

@@ -54,10 +54,9 @@ public partial class ThumbnailView : CollectionViewEx
         get => fileEntries;
     }
 
-    private async void ThumbnailView_Tapped(object sender, TappedEventArgs e)
+    private async void ThumbnailView_Selected(object sender, SelectedEventArgs e)
     {
-        var file = SelectedItem as FileEntryCache;
-        if (file != null)
+        if (e.SelectedItem is FileEntryCache file)
         {
             var param = new Dictionary<string, object> {
                 { "FileEntries", fileEntries },

@@ -6,7 +6,7 @@
                            BindingContext="{Binding Source={RelativeSource Self}}"
                            ItemsSource="{Binding Thumbnails}"
                            SelectionMode="Single"
-                           Tapped="ThumbnailView_Tapped">
+                           Selected="ThumbnailView_Selected">
 
     <CollectionView.ItemsLayout>
         <LinearItemsLayout Orientation="Vertical" />

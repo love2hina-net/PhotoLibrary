@@ -37,10 +37,9 @@ public partial class DirectoryView : CollectionViewEx
         }
     }
 
-    private async void DirectoryView_Tapped(object sender, TappedEventArgs e)
+    private async void DirectoryView_Selected(object sender, SelectedEventArgs e)
     {
-        var dir = SelectedItem as DirectoryInfo;
-        if (dir != null)
+        if (e.SelectedItem is DirectoryInfo dir)
         {
             await Shell.Current.GoToAsync($"directory?TargetDirectory={dir.FullName}", false);
         }

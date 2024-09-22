@@ -59,10 +59,9 @@ public partial class CustomRootPage : ContentPage
         }
     });
 
-    async void CollectionView_OnTapped(object sender, TappedEventArgs args)
+    async void CollectionView_Selected(object sender, SelectedEventArgs args)
     {
-        var entry = rootEntriesView.SelectedItem as CustomRootEntry;
-        if (entry != null)
+        if (args.SelectedItem is CustomRootEntry entry)
         {
             await Shell.Current.GoToAsync($"edit?EntryId={entry.Id}", false);
         }

@@ -20,7 +20,7 @@
             x:Name="rootEntriesView"
             ItemsSource="{Binding RootEntries}"
             SelectionMode="Single"
-            Tapped="CollectionView_OnTapped">
+            Selected="CollectionView_Selected">
 
             <controls:CollectionViewEx.ItemsLayout>
                 <LinearItemsLayout Orientation="Vertical" />
