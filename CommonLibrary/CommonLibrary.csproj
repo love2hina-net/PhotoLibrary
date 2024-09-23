@@ -6,6 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <PropertyGroup>
+    <!-- https://github.com/dlemstra/Magick.NET/issues/1165 -->
+    <MagickCopyNativeMacOS>true</MagickCopyNativeMacOS>
+    <_CustomLinkFlags>-v</_CustomLinkFlags>
+  </PropertyGroup>  
   <Import Project="../firebird.targets" />
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
@@ -21,7 +26,7 @@
     <PackageReference Include="NLog.Extensions.Logging" Version="5.3.12" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="@(Firebird)">
+    <EmbeddedResource Include="@(Firebird)" KeepMetadata="Link">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>None</CopyToPublishDirectory>
     </EmbeddedResource>
