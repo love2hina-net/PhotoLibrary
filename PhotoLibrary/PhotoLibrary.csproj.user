@@ -6,36 +6,5 @@
     <ActiveDebugProfile>Windows Machine</ActiveDebugProfile>
     <SplashScreenSource>Z:\Repositories\PhotoLibrary\PhotoLibrary\Resources\Splash\splash.png</SplashScreenSource>
   </PropertyGroup>
-  <ItemGroup>
-    <AppxManifest Update="Platforms\Windows\Package.appxmanifest">
-      <SubType>Designer</SubType>
-    </AppxManifest>
-    <MauiXaml Update="Controls\AsyncImage.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
-    <MauiXaml Update="Controls\DirectoryView.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
-    <MauiXaml Update="Controls\ThumbnailView.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Configs\CustomRootEditPage.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Configs\CustomRootPage.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
-    <MauiXaml Update="Pages\DirectoryPage.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
-    <MauiXaml Update="Pages\ViewerRootPage.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
-    <MauiXaml Update="Views\AboutPage.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
-    <MauiXaml Update="Pages\ErrorPage.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
-  </ItemGroup>
+  <ItemGroup />
 </Project>

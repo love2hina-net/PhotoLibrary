@@ -34,9 +34,22 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
   </PropertyGroup>
-  <PropertyGroup>
-    <!-- <UseInterpreter>true</UseInterpreter> -->
+  <!-- HACK: Microsoft.Maui.Controls.SingleProject.Before.targets でmacOSが考慮されていないのに対応 -->
+  <PropertyGroup Condition=" '$(SingleProject)' == 'true' ">
+    <PlatformsProjectFolder Condition=" '$(PlatformsProjectFolder)' == '' ">Platforms\</PlatformsProjectFolder>
+    <PlatformsProjectFolder>$([MSBuild]::EnsureTrailingSlash('$(PlatformsProjectFolder)'))</PlatformsProjectFolder>
+    <MacOSProjectFolder Condition=" '$(MacOSProjectFolder)' == '' ">$(PlatformsProjectFolder)MacOS\</MacOSProjectFolder>
+    <MacOSProjectFolder>$([MSBuild]::EnsureTrailingSlash('$(MacOSProjectFolder)'))</MacOSProjectFolder>
   </PropertyGroup>
+  <ItemGroup>
+    <MauiPlatformSpecificFolder Include="$(MacOSProjectFolder)" TargetPlatformIdentifier="macOS" />
+  </ItemGroup>
+  <ItemGroup>
+    <!--
+    <PackageReference Include="Microsoft.iOS.Sdk" Version="17.2.8078" />
+    <Reference Include="Xamarin.iOS" />
+    -->
+  </ItemGroup>
   <ItemGroup>
 		<_CustomLinkFlags Include="-v" />
     <!--
@@ -117,37 +130,17 @@
     </None>
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
-  <Target Name="_Debug" BeforeTargets="_CompileNativeExecutable">
-    <Message Text="###1 @(_CompileNativeExecutableFile)" />
-  </Target>
-
-  <Target Name="_ReplaceNativeExecutableInputs" BeforeTargets="_ComputeNativeExecutableInputs">
-    <ItemGroup>
-      <__SWAP_MainFile Include="@(_MainFile)" />
-      <_MainFile Remove="@(_MainFile)" />
-      <_MainFile Include="@(__SWAP_MainFile)">
-        <Arguments>--target=arm64-apple-darwin -DDEBUG</Arguments>
-      </_MainFile>
-      <__SWAP_MainFile Remove="@(__SWAP_MainFile)" />
+  <!-- HACK: Microsoft.Maui.Controls.SingleProject.targets でmacOSが考慮されていないのに対応 -->
+  <Target Name="_UpdateMauiRemovePlatformCompileItems" BeforeTargets="_MauiRemovePlatformCompileItems">
+    <ItemGroup Condition=" '$(SingleProject)' == 'true' ">
+      <__UpdateCompile
+        Include="$(MacOSProjectFolder)**/*$(DefaultLanguageSourceExtension)"
+        Condition="'$(TargetPlatformIdentifier)' == 'macOS'">
+        <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+      </__UpdateCompile>
+      <Compile Remove="@(__UpdateCompile)" />
+      <Compile Include="@(__UpdateCompile)" />
+      <__UpdateCompile Remove="@(__UpdateCompile)" />
     </ItemGroup>
-  </Target>
-
-  <Target Name="_ReplaceLinkNativeExecutable" BeforeTargets="_LinkNativeExecutable">
-    <Message Text="--- Before ---" />
-    <Message Text="_XamarinMainLibraries: @(_XamarinMainLibraries)" />
-    <Message Text="_BindingLibraryLinkWith: @(_BindingLibraryLinkWith)" />
-    <Message Text="_MainLinkWith: @(_MainLinkWith)" />
-    <Message Text="_ProcessedReferenceNativeSymbol: @(_ProcessedReferenceNativeSymbol)"/>
-    <ItemGroup>
-      <_XamarinMainLibraries Remove="@(_XamarinMainLibraries)" />
-      <_BindingLibraryLinkWith Remove="@(_BindingLibraryLinkWith)" />
-      <_MainLinkWith Remove="@(_MainLinkWith)" />
-      <_ProcessedReferenceNativeSymbol Remove="@(_ProcessedReferenceNativeSymbol)"/>
-    </ItemGroup>
-    <Message Text="--- After ---" />
-    <Message Text="_XamarinMainLibraries: @(_XamarinMainLibraries)" />
-    <Message Text="_BindingLibraryLinkWith: @(_BindingLibraryLinkWith)" />
-    <Message Text="_MainLinkWith: @(_MainLinkWith)" />
-    <Message Text="_ProcessedReferenceNativeSymbol: @(_ProcessedReferenceNativeSymbol)"/>
   </Target>
 </Project>
