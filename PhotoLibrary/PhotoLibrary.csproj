@@ -1,6 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   <PropertyGroup>
-    <TargetFrameworks>net8.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks>net8.0-macos</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
     <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
     <!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
@@ -33,6 +34,16 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <!-- <UseInterpreter>true</UseInterpreter> -->
+  </PropertyGroup>
+  <ItemGroup>
+		<_CustomLinkFlags Include="-v" />
+    <!--
+    <_CustomLinkFlags Include="- -target=arm64-apple-darwin" />
+    <_CustomLinkFlags Include="-mmacosx-version-min=14.2" />
+    -->
+  </ItemGroup>
   <Import Project="../firebird.targets" />
   <ItemGroup>
     <!-- App Icon -->
@@ -105,4 +116,38 @@
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </None>
   </ItemGroup>
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+  <Target Name="_Debug" BeforeTargets="_CompileNativeExecutable">
+    <Message Text="###1 @(_CompileNativeExecutableFile)" />
+  </Target>
+
+  <Target Name="_ReplaceNativeExecutableInputs" BeforeTargets="_ComputeNativeExecutableInputs">
+    <ItemGroup>
+      <__SWAP_MainFile Include="@(_MainFile)" />
+      <_MainFile Remove="@(_MainFile)" />
+      <_MainFile Include="@(__SWAP_MainFile)">
+        <Arguments>--target=arm64-apple-darwin -DDEBUG</Arguments>
+      </_MainFile>
+      <__SWAP_MainFile Remove="@(__SWAP_MainFile)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="_ReplaceLinkNativeExecutable" BeforeTargets="_LinkNativeExecutable">
+    <Message Text="--- Before ---" />
+    <Message Text="_XamarinMainLibraries: @(_XamarinMainLibraries)" />
+    <Message Text="_BindingLibraryLinkWith: @(_BindingLibraryLinkWith)" />
+    <Message Text="_MainLinkWith: @(_MainLinkWith)" />
+    <Message Text="_ProcessedReferenceNativeSymbol: @(_ProcessedReferenceNativeSymbol)"/>
+    <ItemGroup>
+      <_XamarinMainLibraries Remove="@(_XamarinMainLibraries)" />
+      <_BindingLibraryLinkWith Remove="@(_BindingLibraryLinkWith)" />
+      <_MainLinkWith Remove="@(_MainLinkWith)" />
+      <_ProcessedReferenceNativeSymbol Remove="@(_ProcessedReferenceNativeSymbol)"/>
+    </ItemGroup>
+    <Message Text="--- After ---" />
+    <Message Text="_XamarinMainLibraries: @(_XamarinMainLibraries)" />
+    <Message Text="_BindingLibraryLinkWith: @(_BindingLibraryLinkWith)" />
+    <Message Text="_MainLinkWith: @(_MainLinkWith)" />
+    <Message Text="_ProcessedReferenceNativeSymbol: @(_ProcessedReferenceNativeSymbol)"/>
+  </Target>
 </Project>
